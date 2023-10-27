@@ -56,7 +56,7 @@ func (d *DirectRegistry) ListServices(page, pageSize int) ([]*registry.Service, 
 	return nil, nil
 }
 
-func (d *DirectRegistry) Watch() (chan<- []*registry.Service, error) {
+func (d *DirectRegistry) Watch() (<-chan []*registry.Service, error) {
 	if d.watch == nil {
 		d.watch = make(chan []*registry.Service)
 	}
