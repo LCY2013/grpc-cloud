@@ -12,4 +12,6 @@ type IRegistry interface {
 	GetServiceByID(serviceID string) (*Service, error)
 	// ListServices list service
 	ListServices(page, pageSize int) ([]*Service, error)
+	// Watch service
+	Watch() (chan<- []*Service, error)
 }
