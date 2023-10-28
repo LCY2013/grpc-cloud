@@ -1,0 +1,4 @@
+github.com/LCY2013/grpc-cloud/logger v0.0.0-20231027083515-f19328caf8b8/go.mod h1:H9pntoYd6OAmCVv9sBqA6kIkdrgovJ8OK7fh6Q8FKYA=
+github.com/LCY2013/grpc-cloud/registry/registry v0.0.0-20231027083515-f19328caf8b8/go.mod h1:IN7q71Xk8NFBcLIlb+fPlnU9r+8uBgOrQv+sIlg4zms=
+go.uber.org/multierr v1.10.0/go.mod h1:20+QtiLqy0Nd6FdQB9TLXag12DsQkrbs3htMFfDN80Y=
+go.uber.org/zap v1.26.0/go.mod h1:dtElttAiwGvoJ/vj4IwHBS/gXsEu/pZ50mUIRWuG0so=
