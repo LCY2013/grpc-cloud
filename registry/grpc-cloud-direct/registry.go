@@ -16,7 +16,10 @@ type DirectRegistryServer struct {
 // NewDirectRegistryService new direct registry service
 func NewDirectRegistryService() *DirectRegistryServer {
 	return &DirectRegistryServer{
-		DirectRegistry: DirectRegistry{},
+		DirectRegistry: DirectRegistry{
+			serviceMap: map[string]*registry.Service{},
+			watch:      make(chan []*registry.Service),
+		},
 	}
 }
 
