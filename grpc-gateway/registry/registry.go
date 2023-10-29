@@ -25,6 +25,7 @@ func route(service *grpc_cloud_direct.DirectRegistryServer) {
 			for _, srv := range services {
 				logger.Log.Infof("service id %s, name %s, address %s, port %d", srv.ID, srv.Name, srv.Address, srv.Port)
 				// todo 解析到route
+
 			}
 		}
 	}

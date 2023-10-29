@@ -1,4 +1,4 @@
-package protoprint
+package grpcgateway
 
 import (
 	"fmt"

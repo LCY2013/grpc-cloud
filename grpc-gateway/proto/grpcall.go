@@ -4,7 +4,7 @@
 // on the command-line parameters, and supplies an InvocationEventHandler to supply request
 // data (which can come from command-line args or the process's stdin) and to log the
 // events (to the process's stdout).
-package grpcurl
+package grpcgateway
 
 import (
 	"bytes"

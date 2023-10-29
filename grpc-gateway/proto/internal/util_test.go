@@ -1,10 +1,9 @@
 package internal_test
 
 import (
-	"github.com/jhump/protoreflect/desc/internal"
+	"github.com/LCY2013/grpc-cloud/grpc-gateway/proto/internal"
+	testutil "github.com/LCY2013/grpc-cloud/grpc-gateway/utils"
 	"testing"
-
-	"github.com/jhump/protoreflect/internal/testutil"
 )
 
 func TestCreatePrefixList(t *testing.T) {

@@ -1,4 +1,4 @@
-package grpcurl
+package grpcgateway
 
 import (
 	"context"

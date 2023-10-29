@@ -1,10 +1,11 @@
-package grpcurl
+package grpcgateway
 
 import (
 	"context"
 	"fmt"
 	"github.com/jhump/protoreflect/grpcreflect"
 	"google.golang.org/grpc/metadata"
+	"google.golang.org/grpc/reflection/grpc_reflection_v1alpha"
 	"net/http"
 )
 
@@ -22,7 +23,7 @@ func GetDescSource(ctx context.Context, address string, headerList ...http.Heade
 	if err != nil {
 		return nil, err
 	}
-	refClient := grpcreflect.NewClientAuto(refCtx, cc)
+	refClient := grpcreflect.NewClient(refCtx, grpc_reflection_v1alpha.NewServerReflectionClient(cc))
 	reflectSource := DescriptorSourceFromServer(ctx, refClient)
 	return reflectSource, nil
 }
@@ -53,6 +54,9 @@ func ListServiceMethod(ctx context.Context, address string, headerList ...http.H
 			return err
 		}
 		fmt.Println(txt)
+
+		desc := ProtoInfoDesc(dsc)
+		fmt.Println(desc)
 	}
 
 	return nil
