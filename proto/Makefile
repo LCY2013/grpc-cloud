@@ -15,7 +15,8 @@ RM = rm -rf
 LN = ln -sf
 
 # buf
-BUF_PATHS = --path gen
+BUF_BASE = gen
+BUF_PATHS = --path $(BUF_BASE)
 
 #yapi
 YAPI_TOKEN = 526b3b7f2926a35c71552f23d64651f5cf6f57bcb208c8a8be753f95173760a4
@@ -29,7 +30,8 @@ ADD_COMMIT_LEFT = .
 
 generate:
 		buf generate --template buf/buf.gen.yaml $(BUF_PATHS);
-		git add $(BUF_PATHS)/*;
+		cd $(BUF_BASE);
+		git add .;
 		git commit -m "Chore: generate code by auto"
 
 swagger:

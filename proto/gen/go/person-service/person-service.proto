@@ -33,8 +33,8 @@ message PersonMessage {
   string age = 2;
 }
 
-service EchoService {
-  rpc Echo(PersonMessage) returns (PersonMessage) {
+service PersonService {
+  rpc GetPerson(PersonMessage) returns (PersonMessage) {
     option (google.api.http) = {
       post: "/person/service/v1/get"
       body: "*"
