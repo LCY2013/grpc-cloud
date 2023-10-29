@@ -5,6 +5,7 @@
 package httprouter
 
 import (
+	grpcgateway "github.com/LCY2013/grpc-cloud/grpc-gateway/proto"
 	"strings"
 	"unicode"
 	"unicode/utf8"
@@ -72,13 +73,14 @@ const (
 )
 
 type node struct {
-	path      string
-	indices   string
-	wildChild bool
-	nType     nodeType
-	priority  uint32
-	children  []*node
-	handle    []Handle
+	path       string
+	indices    string
+	wildChild  bool
+	nType      nodeType
+	priority   uint32
+	children   []*node
+	handle     []Handle
+	Annotation *grpcgateway.Annotation
 }
 
 // Increments priority of the given child and reorders if necessary

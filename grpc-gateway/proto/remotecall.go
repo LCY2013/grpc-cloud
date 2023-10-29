@@ -45,7 +45,7 @@ func GetDescSource(ctx context.Context, address string, headerList ...http.Heade
 	}
 	md := MetadataFromHeaders(headers)
 	refCtx := metadata.NewOutgoingContext(ctx, md)
-	cc, err := dial(ctx, address)
+	cc, err := Dial(ctx, address)
 	if err != nil {
 		return nil, err
 	}

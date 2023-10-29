@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-func dial(ctx context.Context, address string) (*grpc.ClientConn, error) {
+func Dial(ctx context.Context, address string) (*grpc.ClientConn, error) {
 	dialTime := 3 * time.Second
 	ctx, cancel := context.WithTimeout(ctx, dialTime)
 	defer cancel()
@@ -26,7 +26,7 @@ func dial(ctx context.Context, address string) (*grpc.ClientConn, error) {
 	network := "tcp"
 	cc, err := BlockingDial(ctx, network, address, nil, opts...)
 	if err != nil {
-		logger.Log.Error(err, "Failed to dial target host %q", address)
+		logger.Log.Error(err, "Failed to Dial target host %q", address)
 	}
 	return cc, err
 }

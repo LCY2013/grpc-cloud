@@ -604,7 +604,7 @@ func ServerTransportCredentials(cacertFile, serverCertFile, serverKeyFile string
 	return credentials.NewTLS(&tlsConf), nil
 }
 
-// BlockingDial is a helper method to dial the given address, using optional TLS credentials,
+// BlockingDial is a helper method to Dial the given address, using optional TLS credentials,
 // and blocking until the returned connection is ready. If the given credentials are nil, the
 // connection will be insecure (plain-text).
 func BlockingDial(ctx context.Context, network, address string, creds credentials.TransportCredentials, opts ...grpc.DialOption) (*grpc.ClientConn, error) {
@@ -632,7 +632,7 @@ func BlockingDial(ctx context.Context, network, address string, creds credential
 	dialer := func(ctx context.Context, address string) (net.Conn, error) {
 		// NB: We *could* handle the TLS handshake ourselves, in the custom
 		// dialer (instead of customizing both the dialer and the credentials).
-		// But that requires using WithInsecure dial option (so that the gRPC
+		// But that requires using WithInsecure Dial option (so that the gRPC
 		// library doesn't *also* try to do a handshake). And that would mean
 		// that the library would send the wrong ":scheme" metaheader to
 		// servers: it would send "http" instead of "https" because it is
