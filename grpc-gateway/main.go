@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/LCY2013/grpc-cloud/grpc-gateway/registry"
+	httprouter "github.com/LCY2013/grpc-cloud/grpc-gateway/route"
 	"github.com/LCY2013/grpc-cloud/logger"
 	"net/http"
 )
@@ -9,9 +10,7 @@ import (
 func main() {
 	//grpcgateway.ListServiceMethod(context.Background(), "127.0.0.1:8888")
 	registry.Init()
-	http.HandleFunc("/", func(writer http.ResponseWriter, request *http.Request) {
-		logger.Log.Info("hello world")
-	})
+	httprouter.Init()
 	err := http.ListenAndServe(":8080", nil)
 	if err != nil {
 		logger.Log.Error(err)

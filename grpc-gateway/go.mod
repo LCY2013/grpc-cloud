@@ -4,7 +4,7 @@ go 1.18
 
 require (
 	github.com/LCY2013/grpc-cloud/logger v0.0.0-20231029040625-a4f1adffdb05
-	github.com/LCY2013/grpc-cloud/registry/grpc-cloud-direct v0.0.0-20231029040625-a4f1adffdb05
+	github.com/LCY2013/grpc-cloud/registry/grpc-cloud-direct v0.0.0-20231029141816-c2ae1acb40e6
 	github.com/golang/protobuf v1.4.2
 	github.com/jhump/protoreflect v1.10.1
 	google.golang.org/grpc v1.37.0

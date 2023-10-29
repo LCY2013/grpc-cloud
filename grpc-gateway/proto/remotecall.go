@@ -32,6 +32,7 @@ var (
 type Annotation struct {
 	Method  string            `json:"method,omitempty"`
 	Address string            `json:"address,omitempty"`
+	Symbols string            `json:"symbols,omitempty"`
 	Map     map[string]string `json:"map,omitempty"`
 }
 
@@ -81,9 +82,8 @@ func ListServiceMethod(ctx context.Context, address string, headerList ...http.H
 		}
 
 		desc := ProtoInfoDesc(dsc)
-		for _, options := range desc.MethodOptions {
+		for method, options := range desc.MethodOptions {
 			for _, op := range options {
-				fmt.Println(op.name)
 				optVal, ok := op.val.(proto.Message)
 				if !ok {
 					continue
@@ -93,6 +93,7 @@ func ListServiceMethod(ctx context.Context, address string, headerList ...http.H
 				annota := &Annotation{
 					Address: address,
 					Map:     make(map[string]string),
+					Symbols: fmt.Sprintf("%s/%s", s, method.GetName()),
 				}
 				kvs := strings.Split(anno, " ")
 				for _, a := range kvs {

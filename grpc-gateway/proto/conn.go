@@ -9,11 +9,11 @@ import (
 )
 
 func Dial(ctx context.Context, address string) (*grpc.ClientConn, error) {
-	dialTime := 3 * time.Second
+	dialTime := 30 * time.Second
 	ctx, cancel := context.WithTimeout(ctx, dialTime)
 	defer cancel()
 	var opts []grpc.DialOption
-	timeout := time.Duration(10 * float64(time.Second))
+	timeout := time.Duration(30 * float64(time.Second))
 	opts = append(opts, grpc.WithKeepaliveParams(keepalive.ClientParameters{
 		Time:    timeout,
 		Timeout: timeout,

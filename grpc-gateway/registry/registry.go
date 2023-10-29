@@ -7,6 +7,7 @@ import (
 	httprouter "github.com/LCY2013/grpc-cloud/grpc-gateway/route"
 	"github.com/LCY2013/grpc-cloud/logger"
 	grpc_cloud_direct "github.com/LCY2013/grpc-cloud/registry/grpc-cloud-direct"
+	"strings"
 )
 
 func Init() {
@@ -34,7 +35,8 @@ func route(service *grpc_cloud_direct.DirectRegistryServer) {
 					continue
 				}
 				for uri, anno := range annotations {
-					httprouter.R.AddPath(uri, anno)
+					httprouter.R.AddPath(strings.ReplaceAll(uri, "\"", ""), anno)
+					logger.Log.Info(uri)
 				}
 			}
 		}

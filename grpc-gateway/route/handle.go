@@ -46,10 +46,10 @@ func (r *Route) AddPath(path string, annotation *grpcgateway.Annotation) {
 		h := &grpcgateway.DefaultEventHandler{
 			Out:            writer,
 			Formatter:      formatter,
-			VerbosityLevel: 2, // 0,1,2
+			VerbosityLevel: 0, // 0,1,2
 		}
 
-		err = grpcgateway.InvokeRPC(context.Background(), source, cc, "", header(request.Header), h, rf.Next)
+		err = grpcgateway.InvokeRPC(context.Background(), source, cc, annotation.Symbols, header(request.Header), h, rf.Next)
 		if err != nil {
 			_, _ = writer.Write([]byte(err.Error()))
 			return
@@ -63,4 +63,23 @@ func header(deader map[string][]string) (h []string) {
 	}
 
 	return
+}
+
+func Init() {
+	http.HandleFunc("/", func(writer http.ResponseWriter, request *http.Request) {
+		handle, ps, tsr := R.getValue(request.RequestURI, func() *Params {
+			return &Params{}
+		})
+		if tsr {
+			http.NotFound(writer, request)
+			return
+		}
+		if ps == nil {
+			ps = &Params{}
+		}
+		logger.Log.Info(ps)
+		for _, h := range handle {
+			h(writer, request, *ps)
+		}
+	})
 }
