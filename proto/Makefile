@@ -33,6 +33,7 @@ generate:
 		cd $(BUF_BASE);
 		git add .;
 		git commit -m "Chore: generate code by auto"
+		git push origin main;
 
 swagger:
 	@ for file in $(FILES); \
