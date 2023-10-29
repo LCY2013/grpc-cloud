@@ -19,7 +19,7 @@ BUF_PATHS = --path gen
 YAPI_TOKEN = 526b3b7f2926a35c71552f23d64651f5cf6f57bcb208c8a8be753f95173760a4
 YAPI_ADDR = http://127.0.0.1:40001
 
-.PHONY: generate swagger remove_swagger yapi
+.PHONY: generate swagger del-swagger yapi
 
 generate:
 	@ for file in $(FILES); \
@@ -33,7 +33,7 @@ swagger:
             protoc -I . --openapiv2_out . $$file; \
             done
 
-remove_swagger:
+del-swagger:
 	@ for file in $(foreach dir, $(DIRS), $(wildcard $(dir)/*.swagger.json)); \
 			do \
 			$(RM) $$file; \
