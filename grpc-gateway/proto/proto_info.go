@@ -5,13 +5,13 @@ import (
 	"fmt"
 	"github.com/LCY2013/grpc-cloud/grpc-gateway/proto/internal"
 	protov1 "github.com/golang/protobuf/proto"
+	"github.com/golang/protobuf/protoc-gen-go/descriptor"
 	"github.com/jhump/protoreflect/desc"
 	"github.com/jhump/protoreflect/dynamic"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/reflect/protoreflect"
 	"google.golang.org/protobuf/reflect/protoregistry"
 	"google.golang.org/protobuf/types/descriptorpb"
-	"google.golang.org/protobuf/types/dynamicpb"
 	"google.golang.org/protobuf/types/known/anypb"
 	"math"
 	"reflect"
@@ -635,54 +635,6 @@ type extensionDecl struct {
 
 type extensions map[*desc.FieldDescriptor]*extensionDecl
 
-func valueToOptions(fld protoreflect.FieldDescriptor, name string, val interface{}) []option {
-	switch val := val.(type) {
-	case protoreflect.List:
-		if fld.Number() == internal.UninterpretedOptionsTag {
-			// we handle uninterpreted options differently
-			uninterp := make([]*descriptorpb.UninterpretedOption, 0, val.Len())
-			for i := 0; i < val.Len(); i++ {
-				uo := toUninterpretedOption(val.Get(i).Message().Interface())
-				if uo != nil {
-					uninterp = append(uninterp, uo)
-				}
-			}
-			return uninterpretedToOptions(uninterp)
-		}
-		opts := make([]option, 0, val.Len())
-		for i := 0; i < val.Len(); i++ {
-			elem := valueForOption(fld, val.Get(i).Interface())
-			if elem != nil {
-				opts = append(opts, option{name: name, val: elem})
-			}
-		}
-		return opts
-	case protoreflect.Map:
-		opts := make([]option, 0, val.Len())
-		for _, k := range sortKeys(val) {
-			v := val.Get(k)
-			vf := fld.MapValue()
-			if vf.Kind() == protoreflect.EnumKind {
-				if vf.Enum().Values().ByNumber(v.Enum()) == nil {
-					// have to skip unknown enum values :(
-					continue
-				}
-			}
-			entry := dynamicpb.NewMessage(fld.Message())
-			entry.Set(fld.Message().Fields().ByNumber(1), k.Value())
-			entry.Set(fld.Message().Fields().ByNumber(2), v)
-			opts = append(opts, option{name: name, val: entry})
-		}
-		return opts
-	default:
-		v := valueForOption(fld, val)
-		if v == nil {
-			return nil
-		}
-		return []option{{name: name, val: v}}
-	}
-}
-
 func valueForOption(fld protoreflect.FieldDescriptor, val interface{}) interface{} {
 	switch val := val.(type) {
 	case protoreflect.EnumNumber:
@@ -1225,33 +1177,44 @@ func (p *ReflectionProto) computeExtensions(sourceInfo internal.SourceInfoMap, e
 	return ret
 }
 
-func sortKeys(m protoreflect.Map) []protoreflect.MapKey {
-	res := make([]protoreflect.MapKey, m.Len())
+func sortKeys(m map[interface{}]interface{}) []interface{} {
+	res := make(sortedKeys, len(m))
 	i := 0
-	m.Range(func(k protoreflect.MapKey, _ protoreflect.Value) bool {
+	for k := range m {
 		res[i] = k
 		i++
-		return true
-	})
-	sort.Slice(m, func(i, j int) bool {
-		switch i := res[i].Interface().(type) {
-		case int32:
-			return i < int32(res[j].Int())
-		case uint32:
-			return i < uint32(res[j].Uint())
-		case int64:
-			return i < res[j].Int()
-		case uint64:
-			return i < res[j].Uint()
-		case string:
-			return i < res[j].String()
-		case bool:
-			return !i && res[j].Bool()
-		default:
-			panic(fmt.Sprintf("invalid type for map key: %T", i))
-		}
-	})
-	return res
+	}
+	sort.Sort(res)
+	return ([]interface{})(res)
+}
+
+type sortedKeys []interface{}
+
+func (k sortedKeys) Len() int {
+	return len(k)
+}
+
+func (k sortedKeys) Swap(i, j int) {
+	k[i], k[j] = k[j], k[i]
+}
+
+func (k sortedKeys) Less(i, j int) bool {
+	switch i := k[i].(type) {
+	case int32:
+		return i < k[j].(int32)
+	case uint32:
+		return i < k[j].(uint32)
+	case int64:
+		return i < k[j].(int64)
+	case uint64:
+		return i < k[j].(uint64)
+	case string:
+		return i < k[j].(string)
+	case bool:
+		return !i && k[j].(bool)
+	default:
+		panic(fmt.Sprintf("invalid type for map key: %T", i))
+	}
 }
 
 func (p *ReflectionProto) sort(elements elementAddrs, sourceInfo internal.SourceInfoMap, path []int32) {
@@ -1367,7 +1330,7 @@ func (p *ReflectionProto) typeString(fld *desc.FieldDescriptor, scope string) st
 }
 
 func (p *ReflectionProto) descFile(fd *desc.FileDescriptor, mf *dynamic.MessageFactory, sourceInfo internal.SourceInfoMap) {
-	opts, err := p.extractOptions(fd, protov1.MessageV2(fd.GetOptions()))
+	opts, err := p.extractOptions(fd, fd.GetOptions(), mf)
 	if err != nil {
 		return
 	}
@@ -1385,8 +1348,8 @@ func (p *ReflectionProto) descFile(fd *desc.FileDescriptor, mf *dynamic.MessageF
 		if syn == "" {
 			syn = "proto2"
 		}
-		p.Syntax = syn
 	})
+	p.newLine()
 
 	skip := map[interface{}]bool{}
 
@@ -1407,9 +1370,9 @@ func (p *ReflectionProto) descFile(fd *desc.FileDescriptor, mf *dynamic.MessageF
 	for i := range fd.GetServices() {
 		elements.addrs = append(elements.addrs, elementAddr{elementType: internal.File_servicesTag, elementIndex: i})
 	}
-	p.FileExtensions = p.computeExtensions(sourceInfo, fd.GetExtensions(), []int32{internal.File_extensionsTag})
+	exts := p.computeExtensions(sourceInfo, fd.GetExtensions(), []int32{internal.File_extensionsTag})
 	for i, extd := range fd.GetExtensions() {
-		if extd.GetType() == descriptorpb.FieldDescriptorProto_TYPE_GROUP {
+		if extd.GetType() == descriptor.FieldDescriptorProto_TYPE_GROUP {
 			// we don't emit nested messages for groups since
 			// they get special treatment
 			skip[extd.GetMessageType()] = true
@@ -1420,9 +1383,8 @@ func (p *ReflectionProto) descFile(fd *desc.FileDescriptor, mf *dynamic.MessageF
 	p.sort(elements, sourceInfo, nil)
 
 	pkgName := fd.GetPackage()
-	p.Package = pkgName
 
-	for _, el := range elements.addrs {
+	for i, el := range elements.addrs {
 		d := elements.at(el)
 
 		// skip[d] will panic if d is a slice (which it could be for []option),
@@ -1432,14 +1394,16 @@ func (p *ReflectionProto) descFile(fd *desc.FileDescriptor, mf *dynamic.MessageF
 			continue
 		}
 
+		if i > 0 {
+			p.newLine()
+		}
+
 		path = []int32{el.elementType, int32(el.elementIndex)}
 
 		switch d := d.(type) {
 		case pkg:
 			si := sourceInfo.Get(path)
 			p.descElement(false, si, 0, func() {
-				// package
-				//p.Package = string(d)
 			})
 		case imp:
 			si := sourceInfo.Get(path)
@@ -1459,28 +1423,22 @@ func (p *ReflectionProto) descFile(fd *desc.FileDescriptor, mf *dynamic.MessageF
 				}
 			}
 			p.descElement(false, si, 0, func() {
-				// import package;
-				p.Dependency = append(p.Dependency, fmt.Sprintf("%s%q", modifier, d))
 			})
 		case []option:
-			//p.descOptionsLong(d, reg, sourceInfo, path, 0)
-			p.FileOptions = d
+			p.descOptionsLong(d, sourceInfo, path, 0)
 		case *desc.MessageDescriptor:
-			//p.descMessage(d, reg, sourceInfo, path, 0)
-			p.FileMessageDescriptor = append(p.FileMessageDescriptor, d)
+			p.descMessage(d, mf, sourceInfo, path, 0)
 		case *desc.EnumDescriptor:
-			//p.descEnum(d, reg, sourceInfo, path, 0)
-			p.FileEnumDescriptor = append(p.FileEnumDescriptor, d)
+			p.descEnum(d, mf, sourceInfo, path, 0)
 		case *desc.ServiceDescriptor:
 			p.descService(d, mf, sourceInfo, path, 0)
 		case *desc.FieldDescriptor:
-			/*extDecl := exts[d]
-			p.descExtensions(extDecl, exts, elements, i, reg, sourceInfo, nil, internal.File_extensionsTag, pkgName, pkgName, 0)
+			extDecl := exts[d]
+			p.descExtensions(extDecl, exts, elements, i, mf, sourceInfo, nil, internal.File_extensionsTag, pkgName, pkgName, 0)
 			// we printed all extensions in the group, so we can skip the others
 			for _, fld := range extDecl.fields {
 				skip[fld] = true
-			}*/
-			p.FileFieldDescriptor = append(p.FileFieldDescriptor, d)
+			}
 		}
 	}
 }
@@ -1542,7 +1500,7 @@ func labelString(lbl descriptorpb.FieldDescriptorProto_Label) string {
 
 func (p *ReflectionProto) descField(fld *desc.FieldDescriptor, mf *dynamic.MessageFactory, sourceInfo internal.SourceInfoMap, path []int32, scope string, indent int) {
 	var groupPath []int32
-	var si *descriptorpb.SourceCodeInfo_Location
+	var si *descriptor.SourceCodeInfo_Location
 
 	group := isGroup(fld)
 
@@ -1580,7 +1538,7 @@ func (p *ReflectionProto) descField(fld *desc.FieldDescriptor, mf *dynamic.Messa
 		si = sourceInfo.Get(path)
 	}
 
-	p.descBlockElement(true, si, indent, func(trailer func(int, bool)) {
+	p.descElement(true, si, indent, func() {
 		p.indent(indent)
 		if shouldEmitLabel(fld) {
 			locSi := sourceInfo.Get(append(path, internal.Field_labelTag))
@@ -1601,7 +1559,7 @@ func (p *ReflectionProto) descField(fld *desc.FieldDescriptor, mf *dynamic.Messa
 		numSi := sourceInfo.Get(append(path, internal.Field_numberTag))
 		p.descElementString(numSi, indent, fmt.Sprintf("%d", fld.GetNumber()))
 
-		opts, err := p.extractOptions(fld, protov1.MessageV2(fld.GetOptions()))
+		opts, err := p.extractOptions(fld, fld.GetOptions(), mf)
 		if err != nil {
 			return
 		}
@@ -1612,7 +1570,7 @@ func (p *ReflectionProto) descField(fld *desc.FieldDescriptor, mf *dynamic.Messa
 		if !fld.GetFile().IsProto3() && fld.AsFieldDescriptorProto().DefaultValue != nil {
 			defVal := fld.GetDefaultValue()
 			if fld.GetEnumType() != nil {
-				defVal = ident(fld.GetEnumType().FindValueByNumber(defVal.(int32)).GetName())
+				defVal = fld.GetEnumType().FindValueByNumber(defVal.(int32))
 			}
 			opts[-internal.Field_defaultTag] = []option{{name: "default", val: defVal}}
 		}
@@ -1622,17 +1580,17 @@ func (p *ReflectionProto) descField(fld *desc.FieldDescriptor, mf *dynamic.Messa
 			opts[-internal.Field_jsonNameTag] = []option{{name: "json_name", val: jsn}}
 		}
 
-		p.descOptionsShort(fld, opts, internal.Field_optionsTag, mf, sourceInfo, path, indent)
+		elements := elementAddrs{dsc: fld, opts: opts}
+		elements.addrs = optionsAsElementAddrs(internal.Field_optionsTag, 0, opts)
+		p.sort(elements, sourceInfo, path)
+		p.descOptionElementsShort(elements, sourceInfo, path, indent)
 
 		if group {
-			trailer(indent+1, true)
-
 			p.descMessageBody(fld.GetMessageType(), mf, sourceInfo, groupPath, indent+1)
 
 			p.indent(indent)
 
 		} else {
-			trailer(indent, false)
 		}
 	})
 }
@@ -1640,12 +1598,13 @@ func (p *ReflectionProto) descField(fld *desc.FieldDescriptor, mf *dynamic.Messa
 func (p *ReflectionProto) descExtensionRanges(parent *desc.MessageDescriptor, ranges []*descriptorpb.DescriptorProto_ExtensionRange, maxTag int32, addrs []elementAddr, mf *dynamic.MessageFactory, sourceInfo internal.SourceInfoMap, parentPath []int32, indent int) {
 	p.indent(indent)
 
-	var opts *descriptorpb.ExtensionRangeOptions
+	var opts *descriptor.ExtensionRangeOptions
 	var elPath []int32
 	first := true
 	for i, extr := range ranges {
 		if first {
 			first = false
+		} else {
 		}
 		opts = extr.Options
 		el := addrs[i]
@@ -1659,7 +1618,7 @@ func (p *ReflectionProto) descExtensionRanges(parent *desc.MessageDescriptor, ra
 		})
 	}
 	dsc := extensionRange{owner: parent, extRange: ranges[0]}
-	p.extractAndPrintOptionsShort(dsc, opts, mf, internal.ExtensionRange_optionsTag, sourceInfo, elPath, indent)
+	p.descOptionsShort(dsc, opts, mf, internal.ExtensionRange_optionsTag, sourceInfo, elPath, indent)
 
 }
 
@@ -1667,16 +1626,17 @@ func (p *ReflectionProto) descService(sd *desc.ServiceDescriptor, mf *dynamic.Me
 	serviceInfo := &ServiceInfo{
 		ServiceDescriptor: sd,
 	}
+
 	si := sourceInfo.Get(path)
-	p.descBlockElement(true, si, indent, func(trailer func(int, bool)) {
+	p.descElement(true, si, indent, func() {
 		p.indent(indent)
 
 		nameSi := sourceInfo.Get(append(path, internal.Service_nameTag))
 		p.descElementString(nameSi, indent, sd.GetName())
-		indent++
-		trailer(indent, true)
 
-		opts, err := p.extractOptions(sd, protov1.MessageV2(sd.GetOptions()))
+		indent++
+
+		opts, err := p.extractOptions(sd, sd.GetOptions(), mf)
 		if err != nil {
 			return
 		}
@@ -1693,14 +1653,14 @@ func (p *ReflectionProto) descService(sd *desc.ServiceDescriptor, mf *dynamic.Me
 			if i > 0 {
 			}
 
-			//childPath := append(path, el.elementType, int32(el.elementIndex))
+			childPath := append(path, el.elementType, int32(el.elementIndex))
 
 			switch d := elements.at(el).(type) {
 			case []option:
 				//p.descOptionsLong(d, reg, sourceInfo, childPath, indent)
 				serviceInfo.Options = append(serviceInfo.Options, d...)
 			case *desc.MethodDescriptor:
-				//p.descMethod(d, reg, sourceInfo, childPath, indent)
+				p.descMethod(d, mf, sourceInfo, childPath, indent)
 				serviceInfo.MethodDescriptor = append(serviceInfo.MethodDescriptor, d)
 			}
 		}
@@ -1709,6 +1669,142 @@ func (p *ReflectionProto) descService(sd *desc.ServiceDescriptor, mf *dynamic.Me
 	})
 
 	p.FileServiceInfo = append(p.FileServiceInfo, serviceInfo)
+}
+
+func (p *ReflectionProto) extractOptions(dsc desc.Descriptor, opts protov1.Message, mf *dynamic.MessageFactory) (map[int32][]option, error) {
+	md, err := desc.LoadMessageDescriptorForMessage(opts)
+	if err != nil {
+		return nil, err
+	}
+	dm := mf.NewDynamicMessage(md)
+	if err = dm.ConvertFrom(opts); err != nil {
+		return nil, fmt.Errorf("failed convert %s to dynamic message: %v", md.GetFullyQualifiedName(), err)
+	}
+
+	pkg := dsc.GetFile().GetPackage()
+	var scope string
+	if _, ok := dsc.(*desc.FileDescriptor); ok {
+		scope = pkg
+	} else {
+		scope = dsc.GetFullyQualifiedName()
+	}
+
+	options := map[int32][]option{}
+	var uninterpreted []interface{}
+	for _, fldset := range [][]*desc.FieldDescriptor{md.GetFields(), mf.GetExtensionRegistry().AllExtensionsForType(md.GetFullyQualifiedName())} {
+		for _, fld := range fldset {
+			if dm.HasField(fld) {
+				val := dm.GetField(fld)
+				var opts []option
+				var name string
+				if fld.IsExtension() {
+					name = fmt.Sprintf("(%s)", p.qualifyName(pkg, scope, fld.GetFullyQualifiedName()))
+				} else {
+					name = fld.GetName()
+				}
+				switch val := val.(type) {
+				case []interface{}:
+					if fld.GetNumber() == internal.UninterpretedOptionsTag {
+						// we handle uninterpreted options differently
+						uninterpreted = val
+						continue
+					}
+
+					for _, e := range val {
+						if fld.GetType() == descriptor.FieldDescriptorProto_TYPE_ENUM {
+							ev := fld.GetEnumType().FindValueByNumber(e.(int32))
+							if ev == nil {
+								// have to skip unknown enum values :(
+								continue
+							}
+							e = ev
+						}
+						opts = append(opts, option{name: name, val: e})
+					}
+				case map[interface{}]interface{}:
+					for k := range sortKeys(val) {
+						v := val[k]
+						vf := fld.GetMapValueType()
+						if vf.GetType() == descriptor.FieldDescriptorProto_TYPE_ENUM {
+							ev := vf.GetEnumType().FindValueByNumber(v.(int32))
+							if ev == nil {
+								// have to skip unknown enum values :(
+								continue
+							}
+							v = ev
+						}
+						entry := mf.NewDynamicMessage(fld.GetMessageType())
+						entry.SetFieldByNumber(1, k)
+						entry.SetFieldByNumber(2, v)
+						opts = append(opts, option{name: name, val: entry})
+					}
+				default:
+					if fld.GetType() == descriptor.FieldDescriptorProto_TYPE_ENUM {
+						ev := fld.GetEnumType().FindValueByNumber(val.(int32))
+						if ev == nil {
+							// have to skip unknown enum values :(
+							continue
+						}
+						val = ev
+					}
+					opts = append(opts, option{name: name, val: val})
+				}
+				if len(opts) > 0 {
+					options[fld.GetNumber()] = opts
+				}
+			}
+		}
+	}
+
+	// if there are uninterpreted options, add those too
+	if len(uninterpreted) > 0 {
+		opts := make([]option, len(uninterpreted))
+		for i, u := range uninterpreted {
+			var unint *descriptor.UninterpretedOption
+			if un, ok := u.(*descriptor.UninterpretedOption); ok {
+				unint = un
+			} else {
+				dm := u.(*dynamic.Message)
+				unint = &descriptor.UninterpretedOption{}
+				if err := dm.ConvertTo(unint); err != nil {
+					return nil, err
+				}
+			}
+
+			var buf bytes.Buffer
+			for ni, n := range unint.Name {
+				if ni > 0 {
+					buf.WriteByte('.')
+				}
+				if n.GetIsExtension() {
+					fmt.Fprintf(&buf, "(%s)", n.GetNamePart())
+				} else {
+					buf.WriteString(n.GetNamePart())
+				}
+			}
+
+			var v interface{}
+			switch {
+			case unint.IdentifierValue != nil:
+				v = ident(unint.GetIdentifierValue())
+			case unint.StringValue != nil:
+				v = string(unint.GetStringValue())
+			case unint.DoubleValue != nil:
+				v = unint.GetDoubleValue()
+			case unint.PositiveIntValue != nil:
+				v = unint.GetPositiveIntValue()
+			case unint.NegativeIntValue != nil:
+				v = unint.GetNegativeIntValue()
+			case unint.AggregateValue != nil:
+				v = ident(unint.GetAggregateValue())
+			}
+
+			opts[i] = option{name: buf.String(), val: v}
+		}
+		options[internal.UninterpretedOptionsTag] = opts
+	}
+
+	return options, nil
 }
 
 func (p *ReflectionProto) descMethod(mtd *desc.MethodDescriptor, mf *dynamic.MessageFactory, sourceInfo internal.SourceInfoMap, path []int32, indent int) {
@@ -1734,7 +1830,7 @@ func (p *ReflectionProto) descMethod(mtd *desc.MethodDescriptor, mf *dynamic.Mes
 		}
 		p.descElementString(outSi, indent, outName)
 
-		opts, err := p.extractOptions(mtd, protov1.MessageV2(mtd.GetOptions()))
+		opts, err := p.extractOptions(mtd, mtd.GetOptions(), mf)
 		if err != nil {
 			return
 		}
@@ -1765,17 +1861,14 @@ func (p *ReflectionProto) descMethod(mtd *desc.MethodDescriptor, mf *dynamic.Mes
 
 func (p *ReflectionProto) descEnum(ed *desc.EnumDescriptor, mf *dynamic.MessageFactory, sourceInfo internal.SourceInfoMap, path []int32, indent int) {
 	si := sourceInfo.Get(path)
-	p.descBlockElement(true, si, indent, func(trailer func(int, bool)) {
+	p.descElement(true, si, indent, func() {
 		p.indent(indent)
 
-		//enum
 		nameSi := sourceInfo.Get(append(path, internal.Enum_nameTag))
 		p.descElementString(nameSi, indent, ed.GetName())
-		// {
-		indent++
-		trailer(indent, true)
 
-		opts, err := p.extractOptions(ed, protov1.MessageV2(ed.GetOptions()))
+		indent++
+		opts, err := p.extractOptions(ed, ed.GetOptions(), mf)
 		if err != nil {
 			return
 		}
@@ -1814,7 +1907,7 @@ func (p *ReflectionProto) descEnum(ed *desc.EnumDescriptor, mf *dynamic.MessageF
 
 			switch d := d.(type) {
 			case []option:
-				p.descOptionsLong(d, mf, sourceInfo, childPath, indent)
+				p.descOptionsLong(d, sourceInfo, childPath, indent)
 			case *desc.EnumValueDescriptor:
 				p.descEnumValue(d, mf, sourceInfo, childPath, indent)
 			case reservedRange:
@@ -1851,7 +1944,6 @@ func (p *ReflectionProto) descEnum(ed *desc.EnumDescriptor, mf *dynamic.MessageF
 		}
 
 		p.indent(indent - 1)
-		//}
 	})
 }
 
@@ -1904,7 +1996,7 @@ func (p *ReflectionProto) descEnumValue(evd *desc.EnumValueDescriptor, mf *dynam
 		numSi := sourceInfo.Get(append(path, internal.EnumVal_numberTag))
 		p.descElementString(numSi, indent, fmt.Sprintf("%d", evd.GetNumber()))
 
-		p.extractAndPrintOptionsShort(evd, protov1.MessageV2(evd.GetOptions()), mf, internal.EnumVal_optionsTag, sourceInfo, path, indent)
+		p.descOptionsShort(evd, evd.GetOptions(), mf, internal.EnumVal_optionsTag, sourceInfo, path, indent)
 
 	})
 }
@@ -1950,7 +2042,7 @@ func (p *ReflectionProto) descBlockElement(isDecriptor bool, si *descriptorpb.So
 }
 
 func (p *ReflectionProto) descMessageBody(md *desc.MessageDescriptor, mf *dynamic.MessageFactory, sourceInfo internal.SourceInfoMap, path []int32, indent int) {
-	opts, err := p.extractOptions(md, protov1.MessageV2(md.GetOptions()))
+	opts, err := p.extractOptions(md, md.GetOptions(), mf)
 	if err != nil {
 		return
 	}
@@ -1970,7 +2062,7 @@ func (p *ReflectionProto) descMessageBody(md *desc.MessageDescriptor, mf *dynami
 		elements.addrs = append(elements.addrs, elementAddr{elementType: internal.Message_extensionRangeTag, elementIndex: i})
 	}
 	for i, fld := range md.GetFields() {
-		if fld.IsMap() || fld.GetType() == descriptorpb.FieldDescriptorProto_TYPE_GROUP {
+		if fld.IsMap() || fld.GetType() == descriptor.FieldDescriptorProto_TYPE_GROUP {
 			// we don't emit nested messages for map types or groups since
 			// they get special treatment
 			skip[fld.GetMessageType()] = true
@@ -1985,7 +2077,7 @@ func (p *ReflectionProto) descMessageBody(md *desc.MessageDescriptor, mf *dynami
 	}
 	exts := p.computeExtensions(sourceInfo, md.GetNestedExtensions(), append(path, internal.Message_extensionsTag))
 	for i, extd := range md.GetNestedExtensions() {
-		if extd.GetType() == descriptorpb.FieldDescriptorProto_TYPE_GROUP {
+		if extd.GetType() == descriptor.FieldDescriptorProto_TYPE_GROUP {
 			// we don't emit nested messages for groups since
 			// they get special treatment
 			skip[extd.GetMessageType()] = true
@@ -2016,7 +2108,7 @@ func (p *ReflectionProto) descMessageBody(md *desc.MessageDescriptor, mf *dynami
 
 		switch d := d.(type) {
 		case []option:
-			p.descOptionsLong(d, mf, sourceInfo, childPath, indent)
+			p.descOptionsLong(d, sourceInfo, childPath, indent)
 		case *desc.FieldDescriptor:
 			if d.IsExtension() {
 				extDecl := exts[d]
@@ -2041,17 +2133,17 @@ func (p *ReflectionProto) descMessageBody(md *desc.MessageDescriptor, mf *dynami
 			p.descMessage(d, mf, sourceInfo, childPath, indent)
 		case *desc.EnumDescriptor:
 			p.descEnum(d, mf, sourceInfo, childPath, indent)
-		case *descriptorpb.DescriptorProto_ExtensionRange:
+		case *descriptor.DescriptorProto_ExtensionRange:
 			// collapse ranges into a single "extensions" block
-			ranges := []*descriptorpb.DescriptorProto_ExtensionRange{d}
+			ranges := []*descriptor.DescriptorProto_ExtensionRange{d}
 			addrs := []elementAddr{el}
 			for idx := i + 1; idx < len(elements.addrs); idx++ {
 				elnext := elements.addrs[idx]
 				if elnext.elementType != el.elementType {
 					break
 				}
-				extr := elements.at(elnext).(*descriptorpb.DescriptorProto_ExtensionRange)
-				if !proto.Equal(d.Options, extr.Options) {
+				extr := elements.at(elnext).(*descriptor.DescriptorProto_ExtensionRange)
+				if !areEqual(d.Options, extr.Options, mf) {
 					break
 				}
 				ranges = append(ranges, extr)
@@ -2093,17 +2185,38 @@ func (p *ReflectionProto) descMessageBody(md *desc.MessageDescriptor, mf *dynami
 	}
 }
 
+func areEqual(a, b protov1.Message, mf *dynamic.MessageFactory) bool {
+	// proto.Equal doesn't handle unknown extensions very well :(
+	// so we convert to a dynamic message (which should know about all extensions via
+	// extension registry) and then compare
+	return dynamic.MessagesEqual(asDynamicIfPossible(a, mf), asDynamicIfPossible(b, mf))
+}
+
+func asDynamicIfPossible(msg protov1.Message, mf *dynamic.MessageFactory) protov1.Message {
+	if dm, ok := msg.(*dynamic.Message); ok {
+		return dm
+	} else {
+		md, err := desc.LoadMessageDescriptorForMessage(msg)
+		if err == nil {
+			dm := mf.NewDynamicMessage(md)
+			if dm.ConvertFrom(msg) == nil {
+				return dm
+			}
+		}
+	}
+	return msg
+}
+
 func (p *ReflectionProto) descOneOf(ood *desc.OneOfDescriptor, parentElements elementAddrs, startFieldIndex int, mf *dynamic.MessageFactory, sourceInfo internal.SourceInfoMap, parentPath []int32, indent int, ooIndex int32) {
 	oopath := append(parentPath, internal.Message_oneOfsTag, ooIndex)
 	oosi := sourceInfo.Get(oopath)
-	p.descBlockElement(true, oosi, indent, func(trailer func(int, bool)) {
+	p.descElement(true, oosi, indent, func() {
 		p.indent(indent)
 		extNameSi := sourceInfo.Get(append(oopath, internal.OneOf_nameTag))
 		p.descElementString(extNameSi, indent, ood.GetName())
-		indent++
-		trailer(indent, true)
 
-		opts, err := p.extractOptions(ood, protov1.MessageV2(ood.GetOptions()))
+		indent++
+		opts, err := p.extractOptions(ood, ood.GetOptions(), mf)
 		if err != nil {
 			return
 		}
@@ -2138,7 +2251,7 @@ func (p *ReflectionProto) descOneOf(ood *desc.OneOfDescriptor, parentElements el
 			switch d := elements.at(el).(type) {
 			case []option:
 				childPath := append(oopath, el.elementType, int32(el.elementIndex))
-				p.descOptionsLong(d, mf, sourceInfo, childPath, indent)
+				p.descOptionsLong(d, sourceInfo, childPath, indent)
 			case *desc.FieldDescriptor:
 				childPath := append(parentPath, -el.elementType, int32(el.elementIndex))
 				p.descField(d, mf, sourceInfo, childPath, scope, indent)
@@ -2147,47 +2260,6 @@ func (p *ReflectionProto) descOneOf(ood *desc.OneOfDescriptor, parentElements el
 
 		p.indent(indent - 1)
 	})
-}
-
-func (p *ReflectionProto) extractOptions(dsc desc.Descriptor, opts proto.Message) (map[int32][]option, error) {
-	pkg := dsc.GetFile().GetPackage()
-	var scope string
-	isMessage := false
-	if _, ok := dsc.(*desc.FileDescriptor); ok {
-		scope = pkg
-	} else {
-		_, isMessage = dsc.(*desc.MessageDescriptor)
-		scope = dsc.GetFullyQualifiedName()
-	}
-
-	ref := opts.ProtoReflect()
-
-	options := map[int32][]option{}
-	ref.Range(func(fld protoreflect.FieldDescriptor, val protoreflect.Value) bool {
-		var name string
-		if fld.IsExtension() {
-			var n string
-			if isMessage {
-				n = p.qualifyMessageOptionName(pkg, scope, string(fld.FullName()))
-			} else {
-				n = p.qualifyName(pkg, scope, string(fld.FullName()))
-			}
-			name = fmt.Sprintf("(%s)", n)
-		} else {
-			name = string(fld.Name())
-		}
-		opts := valueToOptions(fld, name, val.Interface())
-		if len(opts) > 0 {
-			for i := range opts {
-				if msg, ok := opts[i].val.(proto.Message); ok {
-					opts[i].val = messageVal{pkg: pkg, scope: scope, msg: msg}
-				}
-			}
-			options[int32(fld.Number())] = opts
-		}
-		return true
-	})
-	return options, nil
 }
 
 func (p *ReflectionProto) descElement(isDecriptor bool, si *descriptorpb.SourceCodeInfo_Location, indent int, el func()) {
@@ -2385,82 +2457,39 @@ func inline(indent int) int {
 	return -indent - 2
 }
 
-func (p *ReflectionProto) descOptionsLong(opts []option, mf *dynamic.MessageFactory, sourceInfo internal.SourceInfoMap, path []int32, indent int) {
+func (p *ReflectionProto) descOptionsLong(opts []option, sourceInfo internal.SourceInfoMap, path []int32, indent int) {
 	p.descOptions(opts, indent,
-		func(i int32) *descriptorpb.SourceCodeInfo_Location {
+		func(i int32) *descriptor.SourceCodeInfo_Location {
 			return sourceInfo.Get(append(path, i))
 		},
-		func(indent int, opt option, _ bool) {
+		func(indent int, opt option) {
 			p.indent(indent)
-			// option
-			p.descOption(mf, opt.name, opt.val, indent)
-			//;
-		},
-		false)
+			p.descOption(opt.name, opt.val, indent)
+		})
 }
 
-func (p *ReflectionProto) extractAndPrintOptionsShort(dsc interface{}, optsMsg proto.Message, mf *dynamic.MessageFactory, optsTag int32, sourceInfo internal.SourceInfoMap, path []int32, indent int) {
+func (p *ReflectionProto) descOptionsShort(dsc interface{}, optsMsg protov1.Message, mf *dynamic.MessageFactory, optsTag int32, sourceInfo internal.SourceInfoMap, path []int32, indent int) {
 	d, ok := dsc.(desc.Descriptor)
 	if !ok {
 		d = dsc.(extensionRange).owner
 	}
-	opts, err := p.extractOptions(d, protov1.MessageV2(optsMsg))
+	opts, err := p.extractOptions(d, optsMsg, mf)
 	if err != nil {
 		return
 	}
-	p.descOptionsShort(dsc, opts, optsTag, mf, sourceInfo, path, indent)
-}
 
-func (p *ReflectionProto) descOptionsShort(dsc interface{}, opts map[int32][]option, optsTag int32, mf *dynamic.MessageFactory, sourceInfo internal.SourceInfoMap, path []int32, indent int) {
 	elements := elementAddrs{dsc: dsc, opts: opts}
 	elements.addrs = optionsAsElementAddrs(optsTag, 0, opts)
-	if len(elements.addrs) == 0 {
-		return
-	}
 	p.sort(elements, sourceInfo, path)
-
-	// we render expanded form if there are many options
-	count := 0
-	for _, addr := range elements.addrs {
-		opts := elements.at(addr).([]option)
-		count += len(opts)
-	}
-	threshold := p.ShortOptionsExpansionThresholdCount
-	if threshold <= 0 {
-		threshold = 3
-	}
-
-	if count > threshold {
-		p.descOptionElementsShort(elements, mf, sourceInfo, path, indent, true)
-	} else {
-		var tmp bytes.Buffer
-		p.descOptionElementsShort(elements, mf, sourceInfo, path, indent, false)
-		threshold := p.ShortOptionsExpansionThresholdLength
-		if threshold <= 0 {
-			threshold = 50
-		}
-		// we subtract 3 so we don't consider the leading " [" and trailing "]"
-		if tmp.Len()-3 > threshold {
-			p.descOptionElementsShort(elements, mf, sourceInfo, path, indent, true)
-		} else {
-			// not too long: commit what we rendered
-			b := tmp.Bytes()
-			if len(b) > 0 && b[0] == ' ' {
-				// don't write extra space
-				b = b[1:]
-			}
-		}
-	}
+	p.descOptionElementsShort(elements, sourceInfo, path, indent)
 }
 
-func (p *ReflectionProto) descOptionElementsShort(addrs elementAddrs, mf *dynamic.MessageFactory, sourceInfo internal.SourceInfoMap, path []int32, indent int, expand bool) {
-	if expand {
-		// [
-		indent++
-	} else {
-		// [
+func (p *ReflectionProto) descOptionElementsShort(addrs elementAddrs, sourceInfo internal.SourceInfoMap, path []int32, indent int) {
+	if len(addrs.addrs) == 0 {
+		return
 	}
-	for i, addr := range addrs.addrs {
+	first := true
+	for _, addr := range addrs.addrs {
 		opts := addrs.at(addr).([]option)
 		var childPath []int32
 		if addr.elementIndex < 0 {
@@ -2469,73 +2498,49 @@ func (p *ReflectionProto) descOptionElementsShort(addrs elementAddrs, mf *dynami
 		} else {
 			childPath = append(path, addr.elementType, int32(addr.elementIndex))
 		}
-		optIndent := indent
-		if !expand {
-			optIndent = inline(indent)
-		}
-		p.descOptions(opts, optIndent,
-			func(i int32) *descriptorpb.SourceCodeInfo_Location {
+		p.descOptions(opts, inline(indent),
+			func(i int32) *descriptor.SourceCodeInfo_Location {
 				p := childPath
 				if addr.elementIndex >= 0 {
 					p = append(p, i)
 				}
 				return sourceInfo.Get(p)
 			},
-			func(indent int, opt option, more bool) {
-				if expand {
-					p.indent(indent)
+			func(indent int, opt option) {
+				if first {
+					first = false
+				} else {
 				}
-				p.descOption(mf, opt.name, opt.val, indent)
-				if more {
-					if expand {
-						//,
-					} else {
-						//,
-					}
-				}
-			},
-			i < len(addrs.addrs)-1)
-	}
-	if expand {
-		p.indent(indent - 1)
+				p.descOption(opt.name, opt.val, indent)
+			})
 	}
 }
 
-func (p *ReflectionProto) descOptions(opts []option, indent int, siFetch func(i int32) *descriptorpb.SourceCodeInfo_Location, fn func(indent int, opt option, more bool), haveMore bool) {
+func (p *ReflectionProto) descOptions(opts []option, indent int, siFetch func(i int32) *descriptor.SourceCodeInfo_Location, fn func(indent int, opt option)) {
 	for i, opt := range opts {
-		more := haveMore
-		if !more {
-			more = i < len(opts)-1
-		}
 		si := siFetch(int32(i))
 		p.descElement(false, si, indent, func() {
-			fn(indent, opt, more)
+			fn(indent, opt)
 		})
 	}
 }
 
-func (p *ReflectionProto) descOption(mf *dynamic.MessageFactory, name string, optVal interface{}, indent int) {
-	fmt.Sprintf("%s = ", name)
+func (p *ReflectionProto) descOption(name string, optVal interface{}, indent int) {
 
 	switch optVal := optVal.(type) {
 	case int32, uint32, int64, uint64:
-		fmt.Sprintf("%d", optVal)
 	case float32, float64:
-		fmt.Sprintf("%f", optVal)
 	case string:
-		fmt.Sprintf("%s", quotedString(optVal))
 	case []byte:
-		fmt.Sprintf("%s", quotedBytes(string(optVal)))
 	case bool:
-		fmt.Sprintf("%v", optVal)
 	case ident:
-		fmt.Sprintf("%s", optVal)
-	case messageVal:
-		threshold := p.MessageLiteralExpansionThresholdLength
-		if threshold == 0 {
-			threshold = 50
-		}
-		p.descMessageLiteralToBufferMaybeCompact(optVal.msg.ProtoReflect(), mf, optVal.pkg, optVal.scope, threshold, indent)
+	case *desc.EnumValueDescriptor:
+	case proto.Message:
+		// TODO: if value is too long, marshal to text format with indentation to
+		// make output prettier (also requires correctly indenting subsequent lines)
+
+		// TODO: alternate approach so we can apply p.ForceFullyQualifiedNames
+		// inside the resulting value?
 
 	default:
 		panic(fmt.Sprintf("unknown type of value %T for field %s", optVal, name))
@@ -2727,15 +2732,6 @@ func (p *ReflectionProto) descMapLiteralCompact(fld protoreflect.FieldDescriptor
 }
 
 func (p *ReflectionProto) descMapLiteralToBuffer(fld protoreflect.FieldDescriptor, val protoreflect.Map, mf *dynamic.MessageFactory, pkg, scope string, threshold, indent int) {
-	keys := sortKeys(val)
-	l := &mapAsList{
-		m:      val,
-		entry:  dynamicpb.NewMessageType(fld.Message()),
-		keyFld: fld.MapKey(),
-		valFld: fld.MapValue(),
-		keys:   keys,
-	}
-	p.descArrayLiteralToBuffer(fld, l, mf, pkg, scope, threshold, indent)
 }
 
 type mapAsList struct {
