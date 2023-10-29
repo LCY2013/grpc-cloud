@@ -68,5 +68,4 @@ protoc -I . --grpc-gateway_out . \
     gen/go/grpc_gateway.proto
 
 protoc -I . --openapiv2_out . gen/go/grpc_gateway.proto
-
  */
