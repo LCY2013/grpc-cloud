@@ -28,10 +28,9 @@ ADD_COMMIT_LEFT = .
 .PHONY: generate swagger del-swagger local-swagger yapi local-yapi commit-swagger commit-yapi
 
 generate:
-	@ for file in $(FILES); \
-            do \
-            buf generate --template buf/buf.gen.yaml $(BUF_PATHS);\
-            done
+		buf generate --template buf/buf.gen.yaml $(BUF_PATHS);
+		git add $(BUF_PATHS)/*;
+		git commit -m "Chore: generate code by auto"
 
 swagger:
 	@ for file in $(FILES); \
