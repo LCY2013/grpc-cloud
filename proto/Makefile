@@ -27,7 +27,7 @@ RM_COMMIT_LEFT = proto
 ADD_COMMIT_LEFT = .
 
 # code api
-.PHONY: generate swagger del-swagger local-swagger yapi local-yapi commit-swagger commit-yapi
+.PHONY: generate swagger del-swagger local-swagger yapi local-yapi commit-swagger commit-yapi tree-proto tree-dir
 
 # generate proto buf and push code
 generate:
@@ -95,15 +95,29 @@ commit-yapi:
             $(RM) $$file; \
             done
 
+# demo
+tree-proto:
+	@ for file in $(FILES); \
+        do \
+        echo $$file; \
+        done
+
+tree-dir:
+	@ for file in $(FILES); \
+        do \
+        echo $$file; \
+        echo $${file%/*}; \
+        done
+
 # git
-.PHONY: quick-merge
+.PHONY: git-quick-merge git-drop-change git-sync-master
 
 MAIN_BRANCH = main
 TARGET_BRANCH = $(target-branch)
 
 # quick merge current branch to target branch
-# eg. make quick-merge target-branch=dev
-quick-merge: quick-merge
+# eg. make git-quick-merge target-branch=dev
+git-quick-merge:
 ifneq ($(TARGET_BRANCH), )
 	@echo $(TARGET_BRANCH) PASSED
 	- git branch -D $(TARGET_BRANCH);
@@ -123,16 +137,15 @@ else
 	$(eval $(exit -1))
 endif
 
-# demo
-tree-proto:
-	@ for file in $(FILES); \
-        do \
-        echo $$file; \
-        done
+# drop local change for git
+git-drop-change:
+	git add .; git stash; git stash drop
 
-tree-dir:
-	@ for file in $(FILES); \
-        do \
-        echo $$file; \
-        echo $${file%/*}; \
-        done
+# sync current branch to master branch
+# err(failed to push some refs to): git pull --rebase origin $$branch
+git-sync-master:
+	export branch=`git branch | grep \* | grep -Eo ' .+'` && \
+		git checkout $(MAIN_BRANCH) && \
+		git pull --rebase && \
+		git checkout $$branch && \
+		git rebase $(MAIN_BRANCH);
