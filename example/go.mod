@@ -3,7 +3,7 @@ module github.com/LCY2013/grpc-cloud/example
 go 1.21.1
 
 require (
-	github.com/LCY2013/grpc-cloud/proto/gen/go v0.0.0-20231029113739-c5e57f31d065
+	github.com/LCY2013/grpc-cloud/proto/gen/go v0.0.0-20231030123830-84ba71a9550b
 	github.com/LCY2013/grpc-cloud/registry/grpc-cloud-direct v0.0.0-20231029141816-c2ae1acb40e6
 	google.golang.org/grpc v1.59.0
 )

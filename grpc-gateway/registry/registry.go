@@ -35,7 +35,7 @@ func route(service *grpc_cloud_direct.DirectRegistryServer) {
 					continue
 				}
 				for uri, anno := range annotations {
-					httprouter.R.AddPath(strings.ReplaceAll(uri, "\"", ""), anno)
+					httprouter.R.AddPath(uri, anno)
 					logger.Log.Info(strings.ReplaceAll(uri, "\"", ""))
 				}
 			}

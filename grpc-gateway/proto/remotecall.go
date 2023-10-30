@@ -3,11 +3,13 @@ package grpcgateway
 import (
 	"context"
 	"fmt"
+	"github.com/LCY2013/grpc-cloud/logger"
 	"github.com/golang/protobuf/proto"
 	"github.com/jhump/protoreflect/grpcreflect"
 	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/reflection/grpc_reflection_v1alpha"
 	"net/http"
+	"regexp"
 	"strings"
 )
 
@@ -88,19 +90,27 @@ func ListServiceMethod(ctx context.Context, address string, headerList ...http.H
 				if !ok {
 					continue
 				}
-				anno := proto.CompactTextString(optVal)
-
 				annota := &Annotation{
 					Address: address,
 					Map:     make(map[string]string),
 					Symbols: fmt.Sprintf("%s/%s", s, method.GetName()),
 				}
+
+				anno := compactTextMarshaler.Text(optVal)
+				logger.Log.Info(anno)
+				kind, path, yes := httpCustom(anno)
+				if yes {
+					annota.Method = kind
+					annotation[path] = annota
+					continue
+				}
+
 				kvs := strings.Split(anno, " ")
 				for _, a := range kvs {
 					kv := strings.Split(a, ":")
-					annota.Map[kv[0]] = kv[1]
+					annota.Map[kv[0]] = removeQuote(kv[1])
 					if _, ok := MethodMap[strings.ToUpper(kv[0])]; ok {
-						annota.Method = MethodMap[strings.ToUpper(kv[0])]
+						annota.Method = removeQuote(MethodMap[strings.ToUpper(kv[0])])
 						annotation[kv[1]] = annota
 					}
 				}
@@ -109,4 +119,30 @@ func ListServiceMethod(ctx context.Context, address string, headerList ...http.H
 	}
 
 	return
+}
+
+var compile = regexp.MustCompile(`<([^)]+)>`)
+
+func httpCustom(anno string) (kind, path string, yes bool) {
+	if !strings.Contains(anno, "custom:<kind") {
+		return "", "", false
+	}
+	str := strings.ReplaceAll(strings.ReplaceAll(compile.FindString(anno), "<", ""), ">", "")
+
+	kvs := strings.Split(str, " ")
+	for _, kv := range kvs {
+		kv := strings.Split(kv, ":")
+		if kv[0] == "kind" {
+			kind = removeQuote(kv[1])
+		}
+		if kv[0] == "path" {
+			path = removeQuote(kv[1])
+		}
+	}
+	yes = true
+	return
+}
+
+func removeQuote(str string) string {
+	return strings.ReplaceAll(str, "\"", "")
 }

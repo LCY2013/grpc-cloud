@@ -44,3 +44,9 @@ func (g *GrpcGatewayServerProc) Echo(ctx context.Context, message *v1.StringMess
 		Value: "hello, " + message.Value,
 	}, nil
 }
+
+func (g *GrpcGatewayServerProc) EchoCustomer(ctx context.Context, message *v1.StringMessage) (*v1.StringMessage, error) {
+	return &v1.StringMessage{
+		Value: "* hello, " + message.Value,
+	}, nil
+}
