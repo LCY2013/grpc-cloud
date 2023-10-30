@@ -18,8 +18,8 @@ plugins:
     out: gen/cpp
   - plugin: go
     out: gen/go
-#    opt:
-#      - paths=source_relative
+    opt:
+      - paths=source_relative
   - plugin: java
     out: gen/java
   - plugin: go-grpc
