@@ -4,7 +4,7 @@
 // - protoc             (unknown)
 // source: gen/proto/echo-service/echo-service.proto
 
-package v1
+package servicev1
 
 import (
 	context "context"

@@ -87,19 +87,19 @@ const char descriptor_table_protodef_gen_2fproto_2fperson_2dservice_2fperson_2ds
     "sonMessage\032&.grpc.gateway.service.v1.Per"
     "sonMessage\"e\222AA\n\016person_service\022\021get a p"
     "erson info\032\004desc*\tgetPersonJ\013\n\003200\022\004\n\002OK"
-    "\202\323\344\223\002\033\"\026/person/service/v1/get:\001*B\302\003\n\032io"
+    "\202\323\344\223\002\033\"\026/person/service/v1/get:\001*B\321\003\n\032io"
     ".grpc.gateway.service.v1B\022PersonServiceP"
-    "rotoH\002Z\026grpc/person/service/v1\242\002\003GGS\252\002\027G"
-    "rpc.Gateway.Service.V1\312\002\027Grpc\\Gateway\\Se"
-    "rvice\\V1\342\002#Grpc\\Gateway\\Service\\V1\\GPBMe"
-    "tadata\352\002\032Grpc::Gateway::Service::V1\222A\367\001\022"
-    "\273\001\n\nPerson API\"Q\n\026person_service project"
-    "\022%https://github.com/LCY2013/grpc-cloud\032"
-    "\020none@example.com*U\n\032Apache License Vers"
-    "ion 2.0\0227https://github.com/LCY2013/grpc"
-    "-cloud/blob/main/LICENSE2\0031.0*\001\0022\020applic"
-    "ation/json:\020application/jsonj\020\n\016person_s"
-    "erviceb\006proto3"
+    "rotoH\002Z%go/gen/proto/person-service;serv"
+    "icev1\242\002\003GGS\252\002\027Grpc.Gateway.Service.V1\312\002\027"
+    "Grpc\\Gateway\\Service\\V1\342\002#Grpc\\Gateway\\S"
+    "ervice\\V1\\GPBMetadata\352\002\032Grpc::Gateway::S"
+    "ervice::V1\222A\367\001\022\273\001\n\nPerson API\"Q\n\026person_"
+    "service project\022%https://github.com/LCY2"
+    "013/grpc-cloud\032\020none@example.com*U\n\032Apac"
+    "he License Version 2.0\0227https://github.c"
+    "om/LCY2013/grpc-cloud/blob/main/LICENSE2"
+    "\0031.0*\001\0022\020application/json:\020application/j"
+    "sonj\020\n\016person_serviceb\006proto3"
 };
 static const ::_pbi::DescriptorTable* const descriptor_table_gen_2fproto_2fperson_2dservice_2fperson_2dservice_2eproto_deps[2] =
     {
@@ -110,7 +110,7 @@ static ::absl::once_flag descriptor_table_gen_2fproto_2fperson_2dservice_2fperso
 const ::_pbi::DescriptorTable descriptor_table_gen_2fproto_2fperson_2dservice_2fperson_2dservice_2eproto = {
     false,
     false,
-    894,
+    909,
     descriptor_table_protodef_gen_2fproto_2fperson_2dservice_2fperson_2dservice_2eproto,
     "gen/proto/person-service/person-service.proto",
     &descriptor_table_gen_2fproto_2fperson_2dservice_2fperson_2dservice_2eproto_once,

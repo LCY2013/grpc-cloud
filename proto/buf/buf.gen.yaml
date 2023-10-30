@@ -5,8 +5,8 @@ managed:
 
   # C++
   # go
-#  go_package_prefix:
-#    default: github.com/grpc-cloud/proto/gen/go
+  go_package_prefix:
+    default: go
 
   # Java
   java_multiple_files: false
