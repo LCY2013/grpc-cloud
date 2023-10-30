@@ -21,10 +21,32 @@ BUF_PATHS = --path $(BUF_BASE)
 #yapi
 YAPI_TOKEN = 526b3b7f2926a35c71552f23d64651f5cf6f57bcb208c8a8be753f95173760a4
 YAPI_ADDR = http://127.0.0.1:40001
+yapi_addr=$(YAPI_ADDR)
+yapi_token=$(YAPI_TOKEN)
 
 #commit
 RM_COMMIT_LEFT = proto
 ADD_COMMIT_LEFT = .
+
+.PHONY: help
+
+help:
+	@echo "Usage: make [target] ..."
+	@echo "Targets:"
+	@echo "  generate: generate proto buf and push code"
+	@echo "  swagger: generate swagger file by proto file"
+	@echo "  del-swagger: delete generate swagger file"
+	@echo "  yapi: push swagger file to yapi"
+	@echo "  local-swagger: generate swagger file by proto file, with local proto file change"
+	@echo "  local-yapi: push swagger file to yapi"
+	@echo "  commit-swagger: generate swagger file by proto file, with latest commit proto file"
+	@echo "  commit-yapi: push swagger file to yapi"
+	@echo "  tree-proto: demo"
+	@echo "  tree-dir: demo"
+	@echo "  git-quick-merge: quick merge current branch to target branch"
+	@echo "  git-drop-change: drop local change for git"
+	@echo "  git-sync-master: sync current branch to master branch"
+
 
 # code api
 .PHONY: generate swagger del-swagger local-swagger yapi local-yapi commit-swagger commit-yapi tree-proto tree-dir
@@ -57,7 +79,7 @@ yapi:
 	@ for file in $(foreach dir, $(DIRS), $(wildcard $(dir)/*.swagger.json)); \
             do \
             CONTENT=$$(cat $$file); \
-            curl -d "type=swagger&merge=merge&token=$(YAPI_TOKEN)&json=$$CONTENT" -H "Content-Type: application/x-www-form-urlencoded" -X POST $(YAPI_ADDR)/api/open/import_data; \
+            curl -d "type=swagger&merge=merge&token=$(yapi_token)&json=$$CONTENT" -H "Content-Type: application/x-www-form-urlencoded" -X POST $(yapi_addr)/api/open/import_data; \
             $(RM) $$file; \
             done
 
@@ -74,7 +96,7 @@ local-yapi:
 	@ for file in $(foreach dir, $(DIRS), $(wildcard $(dir)/*.swagger.json)); \
             do \
             CONTENT=$$(cat $$file); \
-            curl -d "type=swagger&merge=merge&token=$(YAPI_TOKEN)&json=$$CONTENT" -H "Content-Type: application/x-www-form-urlencoded" -X POST $(YAPI_ADDR)/api/open/import_data; \
+            curl -d "type=swagger&merge=merge&token=$(yapi_token)&json=$$CONTENT" -H "Content-Type: application/x-www-form-urlencoded" -X POST $(yapi_addr)/api/open/import_data; \
             $(RM) $$file; \
             done
 
@@ -91,7 +113,7 @@ commit-yapi:
 	@ for file in $(foreach dir, $(DIRS), $(wildcard $(dir)/*.swagger.json)); \
             do \
             CONTENT=$$(cat $$file); \
-            curl -d "type=swagger&merge=merge&token=$(YAPI_TOKEN)&json=$$CONTENT" -H "Content-Type: application/x-www-form-urlencoded" -X POST $(YAPI_ADDR)/api/open/import_data; \
+            curl -d "type=swagger&merge=merge&token=$(yapi_token)&json=$$CONTENT" -H "Content-Type: application/x-www-form-urlencoded" -X POST $(yapi_addr)/api/open/import_data; \
             $(RM) $$file; \
             done
 
@@ -149,3 +171,14 @@ git-sync-master:
 		git pull --rebase && \
 		git checkout $$branch && \
 		git rebase $(MAIN_BRANCH);
+
+print:
+#ifneq ($(yapi_addr), )
+#	export addr=$(yapi_addr) && \
+#	echo "yapi_addr: $$addr"
+#endif
+#ifneq ($(yapi_token), )
+#	export token=$(yapi_token) && \
+#	echo "yapi_token: $$token"
+#endif
+	echo "$(yapi_addr):$(yapi_token)"
