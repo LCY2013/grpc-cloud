@@ -4,7 +4,7 @@
 // - protoc             (unknown)
 // source: gen/proto/person-service/person-service.proto
 
-package servicev1
+package v1
 
 import (
 	context "context"
