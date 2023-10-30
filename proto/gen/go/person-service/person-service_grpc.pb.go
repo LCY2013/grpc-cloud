@@ -4,7 +4,7 @@
 // - protoc             (unknown)
 // source: gen/go/person-service/person-service.proto
 
-package v1
+package servicev1
 
 import (
 	context "context"

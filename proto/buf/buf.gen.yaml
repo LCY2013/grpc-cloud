@@ -1,9 +1,27 @@
 version: v1
+managed:
+  enabled: true
+  optimize_for: CODE_SIZE
+
+  # C++
+  # go
+  go_package_prefix:
+    default: github.com/grpc-cloud/proto/gen/go
+
+  # Java
+  java_multiple_files: false
+  java_package_prefix: { default: io }
+  java_string_check_utf8: false
+
 plugins:
+  - plugin: cpp
+    out: gen/cpp
   - plugin: go
     out: ./
     opt:
       - paths=source_relative
+  - plugin: java
+    out: gen/cpp
   - plugin: go-grpc
     out: ./
     opt:
