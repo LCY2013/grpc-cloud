@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/LCY2013/grpc-cloud/logger"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/backoff"
 	"google.golang.org/grpc/connectivity"
 	"google.golang.org/grpc/keepalive"
 	"sync"
@@ -40,14 +41,10 @@ func (cp *connPool) putConn(address string, cc *grpc.ClientConn) {
 func Dial(ctx context.Context, address string) (*grpc.ClientConn, error) {
 	gLock.Lock()
 	defer gLock.Unlock()
-	if cc := pool.conn(address); cc != nil && cc.GetState() == connectivity.Ready {
+	if cc := pool.conn(address); cc != nil && cc.GetState() != connectivity.Shutdown {
 		return cc, nil
-	} else {
-		err := cc.Close()
-		if err != nil {
-			return nil, err
-		}
 	}
+
 	dialTime := 30 * time.Second
 	ctx, cancel := context.WithTimeout(ctx, dialTime)
 	defer cancel()
@@ -57,6 +54,17 @@ func Dial(ctx context.Context, address string) (*grpc.ClientConn, error) {
 		Time:    timeout,
 		Timeout: timeout,
 	}))
+	opts = append(opts,
+		grpc.WithConnectParams(grpc.ConnectParams{
+			Backoff: backoff.Config{
+				BaseDelay:  1.0 * time.Second,
+				Multiplier: 1.6,
+				Jitter:     0.2,
+				MaxDelay:   30 * time.Second,
+			},
+			MinConnectTimeout: 5,
+		}),
+	)
 	opts = append(opts, grpc.WithDefaultCallOptions(grpc.MaxCallRecvMsgSize(1024*1024*1024)))
 
 	UA := "grpc-gateway/fufeng"
