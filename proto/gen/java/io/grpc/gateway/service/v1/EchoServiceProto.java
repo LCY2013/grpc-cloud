@@ -468,19 +468,18 @@ public final class EchoServiceProto {
       "y.service.v1.StringMessage\"o\222A=\n\014echo-se" +
       "rvice\022\016echo a message\032\004desc*\ngetMessageJ" +
       "\013\n\003200\022\004\n\002OK\202\323\344\223\002):\001*B$\n\001*\022\037/echo/servic" +
-      "e/v1/example/echo/cB\307\003\n\032io.grpc.gateway." +
-      "service.v1B\020EchoServiceProtoH\002Z#go/gen/p" +
-      "roto/echo-service;servicev1\242\002\003GGS\252\002\027Grpc" +
-      ".Gateway.Service.V1\312\002\027Grpc\\Gateway\\Servi" +
-      "ce\\V1\342\002#Grpc\\Gateway\\Service\\V1\\GPBMetad" +
-      "ata\352\002\032Grpc::Gateway::Service::V1\222A\361\001\022\267\001\n" +
-      "\010Echo API\"O\n\024echo_service project\022%https" +
-      "://github.com/LCY2013/grpc-cloud\032\020none@e" +
-      "xample.com*U\n\032Apache License Version 2.0" +
-      "\0227https://github.com/LCY2013/grpc-cloud/" +
-      "blob/main/LICENSE2\0031.0*\001\0022\020application/j" +
-      "son:\020application/jsonj\016\n\014echo-serviceb\006p" +
-      "roto3"
+      "e/v1/example/echo/cB\270\003\n\032io.grpc.gateway." +
+      "service.v1B\020EchoServiceProtoH\002Z\024grpc/ech" +
+      "o/service/v1\242\002\003GGS\252\002\027Grpc.Gateway.Servic" +
+      "e.V1\312\002\027Grpc\\Gateway\\Service\\V1\342\002#Grpc\\Ga" +
+      "teway\\Service\\V1\\GPBMetadata\352\002\032Grpc::Gat" +
+      "eway::Service::V1\222A\361\001\022\267\001\n\010Echo API\"O\n\024ec" +
+      "ho_service project\022%https://github.com/L" +
+      "CY2013/grpc-cloud\032\020none@example.com*U\n\032A" +
+      "pache License Version 2.0\0227https://githu" +
+      "b.com/LCY2013/grpc-cloud/blob/main/LICEN" +
+      "SE2\0031.0*\001\0022\020application/json:\020applicatio" +
+      "n/jsonj\016\n\014echo-serviceb\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,

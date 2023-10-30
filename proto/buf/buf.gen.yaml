@@ -5,8 +5,8 @@ managed:
 
   # C++
   # go
-  go_package_prefix:
-    default: go
+#  go_package_prefix:
+#    default: go
 
   # Java
   java_multiple_files: false
@@ -19,13 +19,13 @@ plugins:
   - plugin: java
     out: gen/java
   - plugin: go
-    out: ./
-    opt:
-      - paths=source_relative
+    out: gen/go
+#    opt:
+#      - paths=source_relative
   - plugin: go-grpc
     out: ./
     opt:
-      - paths=source_relative
+#      - paths=source_relative
       - require_unimplemented_servers=false
 #  - name: connect-go
 #    out: gen
