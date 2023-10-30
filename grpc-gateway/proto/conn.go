@@ -13,7 +13,9 @@ import (
 
 // conn pool for grpc
 var (
-	pool  = &connPool{}
+	pool = &connPool{
+		conns: make(map[string]*grpc.ClientConn),
+	}
 	gLock sync.Mutex
 )
 

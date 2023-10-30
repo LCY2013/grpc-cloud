@@ -16,7 +16,7 @@ var (
 		"grpc.reflection.v1.ServerReflection":      {},
 		"grpc.reflection.v1alpha.ServerReflection": {},
 	}
-	methodMap = map[string]string{
+	MethodMap = map[string]string{
 		http.MethodGet:     http.MethodGet,
 		http.MethodHead:    http.MethodHead,
 		http.MethodPost:    http.MethodPost,
@@ -99,8 +99,8 @@ func ListServiceMethod(ctx context.Context, address string, headerList ...http.H
 				for _, a := range kvs {
 					kv := strings.Split(a, ":")
 					annota.Map[kv[0]] = kv[1]
-					if _, ok := methodMap[strings.ToUpper(kv[0])]; ok {
-						annota.Method = methodMap[strings.ToUpper(kv[0])]
+					if _, ok := MethodMap[strings.ToUpper(kv[0])]; ok {
+						annota.Method = MethodMap[strings.ToUpper(kv[0])]
 						annotation[kv[1]] = annota
 					}
 				}

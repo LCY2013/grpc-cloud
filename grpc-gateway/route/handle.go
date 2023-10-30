@@ -21,6 +21,22 @@ type Route struct {
 
 // AddPath add path
 func (r *Route) AddPath(path string, annotation *grpcgateway.Annotation) {
+	if annotation.Method == "*" {
+		for k := range grpcgateway.MethodMap {
+			r.addUri(path, &grpcgateway.Annotation{
+				Method:  k,
+				Address: annotation.Address,
+				Symbols: annotation.Symbols,
+				Map:     annotation.Map,
+			})
+		}
+
+		return
+	}
+	r.addUri(path, annotation)
+}
+
+func (r *Route) addUri(path string, annotation *grpcgateway.Annotation) {
 	n, ok := R.tree[annotation.Method]
 	if !ok {
 		R.tree[annotation.Method] = &node{}
