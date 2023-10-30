@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"github.com/LCY2013/grpc-cloud/grpc-gateway/ack"
 	"io"
+	"net/http"
 	"reflect"
 	"strings"
 	"sync"
@@ -489,7 +490,15 @@ func (h *DefaultEventHandler) OnReceiveResponse(resp proto.Message) {
 	if respStr, err := h.Formatter(resp); err != nil {
 		fmt.Fprintf(h.Out, "Failed to format response message %d: %v\n", h.NumResponses, err)
 	} else {
-		fmt.Fprintf(h.Out, ack.ToSuccessResponse(respStr))
+		switch httpWrite := h.Out.(type) {
+		case http.ResponseWriter:
+			httpWrite.Header().Add("Content-Type", "application/json")
+			httpWrite.WriteHeader(http.StatusOK)
+			httpWrite.Write([]byte(ack.ToSuccessResponse(respStr)))
+		default:
+			fmt.Fprintf(h.Out, ack.ToSuccessResponse(respStr))
+		}
+
 	}
 }
 
