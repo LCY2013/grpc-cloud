@@ -26,8 +26,10 @@ YAPI_ADDR = http://127.0.0.1:40001
 RM_COMMIT_LEFT = proto
 ADD_COMMIT_LEFT = .
 
+# code api
 .PHONY: generate swagger del-swagger local-swagger yapi local-yapi commit-swagger commit-yapi
 
+# generate proto buf and push code
 generate:
 		buf generate --template buf/buf.gen.yaml $(BUF_PATHS);
 		cd $(BUF_BASE);
@@ -35,18 +37,21 @@ generate:
 		git commit -m "Chore: generate code by auto"
 		git push origin main;
 
+# generate swagger file by proto file
 swagger:
 	@ for file in $(FILES); \
             do \
             protoc -I . --openapiv2_out . $$file; \
             done
 
+# delete generate swagger file
 del-swagger:
 	@ for file in $(foreach dir, $(DIRS), $(wildcard $(dir)/*.swagger.json)); \
 			do \
 			$(RM) $$file; \
 			done
 
+# push swagger file to yapi
 yapi:
 	$(shell make swagger)
 	@ for file in $(foreach dir, $(DIRS), $(wildcard $(dir)/*.swagger.json)); \
@@ -56,12 +61,14 @@ yapi:
             $(RM) $$file; \
             done
 
+# generate swagger file by proto file, with local proto file change
 local-swagger:
 	@ for file in $(COMMIT_LOCAL_PROTO_FILES); \
 			do \
 			protoc -I . --openapiv2_out . $$file; \
 			done
 
+# push swagger file to yapi
 local-yapi:
 	$(shell make local-swagger)
 	@ for file in $(foreach dir, $(DIRS), $(wildcard $(dir)/*.swagger.json)); \
@@ -71,12 +78,14 @@ local-yapi:
             $(RM) $$file; \
             done
 
+# generate swagger file by proto file, with latest commit proto file
 commit-swagger:
 	@ for file in $(COMMIT_PROTO_FILES); \
 			do \
 			protoc -I . --openapiv2_out . $(ADD_COMMIT_LEFT)$${file#$(RM_COMMIT_LEFT)}; \
 			done
 
+# push swagger file to yapi
 commit-yapi:
 	$(shell make commit-swagger)
 	@ for file in $(foreach dir, $(DIRS), $(wildcard $(dir)/*.swagger.json)); \
@@ -86,6 +95,35 @@ commit-yapi:
             $(RM) $$file; \
             done
 
+# git
+.PHONY: quick-merge
+
+MAIN_BRANCH = main
+TARGET_BRANCH = $(target-branch)
+
+# quick merge current branch to target branch
+# eg. make quick-merge target-branch=dev
+quick-merge: quick-merge
+ifneq ($(TARGET_BRANCH), )
+	@echo $(TARGET_BRANCH) PASSED
+	- git branch -D $(TARGET_BRANCH);
+	git fetch;
+	export branch=`git branch | grep \* | grep -Eo ' .+'` && \
+		echo "current branch: $$branch" && \
+		git checkout $(TARGET_BRANCH) && \
+		git pull --rebase && \
+		git merge origin/$(MAIN_BRANCH) && \
+		echo "merge: \033[0;31morigin/$(MAIN_BRANCH)\033[0m  to \033[0;31m$(TARGET_BRANCH)\033[0m" && \
+		git merge $$branch && \
+		echo "merge: \033[0;31m$$branch\033[0m to \033[0;31m$(TARGET_BRANCH)\033[0m" && \
+		git push && \
+		git checkout $$branch;
+else
+	@echo "\033[0;31mFAILED\033[0m, eg. make quick-merge target-branch=dev"
+	$(eval $(exit -1))
+endif
+
+# demo
 tree-proto:
 	@ for file in $(FILES); \
         do \
