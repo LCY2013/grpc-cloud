@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 	"github.com/LCY2013/grpc-cloud/logger"
-	v1 "github.com/LCY2013/grpc-cloud/proto/gen/go/person-service"
+	v1 "github.com/LCY2013/grpc-cloud/proto/gen/go/grpc/person/service/v1"
 	grpc_cloud_direct "github.com/LCY2013/grpc-cloud/registry/grpc-cloud-direct"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"

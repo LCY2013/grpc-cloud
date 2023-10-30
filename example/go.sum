@@ -4,6 +4,8 @@ github.com/LCY2013/grpc-cloud/proto/gen/go v0.0.0-20231029113739-c5e57f31d065 h1
 github.com/LCY2013/grpc-cloud/proto/gen/go v0.0.0-20231029113739-c5e57f31d065/go.mod h1:YO6zQE1b+F8TjWOY9zkZKjb2irl0J0k+KXwC6r9sSAw=
 github.com/LCY2013/grpc-cloud/proto/gen/go v0.0.0-20231030123830-84ba71a9550b h1:Kek6fIvGCxB/YjQCYMpyhVbvaoN2cZxK8qU2oATMWT8=
 github.com/LCY2013/grpc-cloud/proto/gen/go v0.0.0-20231030123830-84ba71a9550b/go.mod h1:YO6zQE1b+F8TjWOY9zkZKjb2irl0J0k+KXwC6r9sSAw=
+github.com/LCY2013/grpc-cloud/proto/gen/go v0.0.0-20231030163421-e488ae6bb084 h1:fTlU/CHc0hRzx19mjcsvH8Y5X1nwffeD0uYSiNz2EFo=
+github.com/LCY2013/grpc-cloud/proto/gen/go v0.0.0-20231030163421-e488ae6bb084/go.mod h1:YO6zQE1b+F8TjWOY9zkZKjb2irl0J0k+KXwC6r9sSAw=
 github.com/LCY2013/grpc-cloud/registry/grpc-cloud-direct v0.0.0-20231029113739-c5e57f31d065 h1:7qu/b7iyRQIJrQzatdajGUQwlwm/WHyBHerUpEh0JM4=
 github.com/LCY2013/grpc-cloud/registry/grpc-cloud-direct v0.0.0-20231029113739-c5e57f31d065/go.mod h1:FavlLkWZBZhcIE4t8rzjg8qqYiczREVNDkp9mGL+BI0=
 github.com/LCY2013/grpc-cloud/registry/grpc-cloud-direct v0.0.0-20231029141816-c2ae1acb40e6 h1:lezlSmf2d+7hh4HlsjtWA76Qp4kbxS2cejKcpD3bhBI=
