@@ -16,36 +16,45 @@ LN = ln -sf
 
 # buf
 BUF_BASE = gen
-BUF_PATHS = --path $(BUF_BASE)
+buf_base=$(BUF_BASE)
+BUF_PATHS = --path $(buf_base)
+buf_paths=$(BUF_PATHS)
 
 #yapi
-YAPI_TOKEN = 526b3b7f2926a35c71552f23d64651f5cf6f57bcb208c8a8be753f95173760a4
-YAPI_ADDR = http://127.0.0.1:40001
-yapi_addr=$(YAPI_ADDR)
-yapi_token=$(YAPI_TOKEN)
+YAPI_TOKEN_DEFAULT = 526b3b7f2926a35c71552f23d64651f5cf6f57bcb208c8a8be753f95173760a4
+YAPI_ADDR_DEFAULT = http://127.0.0.1:40001
+yapi_addr=$(YAPI_ADDR_DEFAULT)
+yapi_token=$(YAPI_TOKEN_DEFAULT)
 
 #commit
 RM_COMMIT_LEFT = proto
+rm_commit_left = $(RM_COMMIT_LEFT)
 ADD_COMMIT_LEFT = .
+add_commit_left = $(ADD_COMMIT_LEFT)
 
 .PHONY: help
 
 help:
-	@echo "Usage: make [target] ..."
+	@echo "Usage: make [target] [buf_base=] [buf_paths=] [rm_commit_left=] [add_commit_left] ..."
+	@echo "Options:"
+	@echo "  \033[0;31mbuf_base\033[0m: buf base path, eg: make generate buf_base=gen"
+	@echo "  \033[0;31mbuf_paths\033[0m: buf paths, eg: make generate buf_paths=--path gen"
+	@echo "  \033[0;31mrm_commit_left\033[0m: rm commit left, eg: make commit-swagger rm_commit_left=proto"
+	@echo "  \033[0;31madd_commit_left\033[0m: add commit left, eg: make commit-swagger add_commit_left=."
 	@echo "Targets:"
-	@echo "  generate: generate proto buf and push code"
-	@echo "  swagger: generate swagger file by proto file"
-	@echo "  del-swagger: delete generate swagger file"
-	@echo "  yapi: push swagger file to yapi"
-	@echo "  local-swagger: generate swagger file by proto file, with local proto file change"
-	@echo "  local-yapi: push swagger file to yapi"
-	@echo "  commit-swagger: generate swagger file by proto file, with latest commit proto file"
-	@echo "  commit-yapi: push swagger file to yapi"
-	@echo "  tree-proto: demo"
-	@echo "  tree-dir: demo"
-	@echo "  git-quick-merge: quick merge current branch to target branch"
-	@echo "  git-drop-change: drop local change for git"
-	@echo "  git-sync-master: sync current branch to master branch"
+	@echo "  \033[0;31mgenerate\033[0m: generate proto buf and push code, eg: make generate [buf_base=] [buf_paths=]"
+	@echo "  \033[0;31mswagger\033[0m: generate swagger file by proto file"
+	@echo "  \033[0;31mdel-swagger\033[0m: delete generate swagger file"
+	@echo "  \033[0;31myapi\033[0m: push swagger file to yapi, eg: make yapi [yapi_addr=] [yapi_token=]"
+	@echo "  \033[0;31mlocal-swagger\033[0m: generate swagger file by proto file, with local proto file change"
+	@echo "  \033[0;31mlocal-yapi\033[0m: push swagger file to yapi, eg: make local-yapi [yapi_addr=] [yapi_token=]"
+	@echo "  \033[0;31mcommit-swagger\033[0m: generate swagger file by proto file, with latest commit proto file"
+	@echo "  \033[0;31mcommit-yapi\033[0m: push swagger file to yapi, eg: make commit-yapi [yapi_addr=] [yapi_token=]"
+	@echo "  \033[0;31mtree-proto\033[0m: tree proto file"
+	@echo "  \033[0;31mtree-dir\033[0m: tree dir"
+	@echo "  \033[0;31mgit-quick-merge\033[0m: quick merge current branch to target branch"
+	@echo "  \033[0;31mgit-drop-change\033[0m: drop local change for git"
+	@echo "  \033[0;31mgit-sync-master\033[0m: sync current branch to master branch"
 
 
 # code api
@@ -53,8 +62,8 @@ help:
 
 # generate proto buf and push code
 generate:
-		buf generate --template buf/buf.gen.yaml $(BUF_PATHS);
-		cd $(BUF_BASE);
+		buf generate --template buf/buf.gen.yaml $(buf_paths);
+		cd $(buf_base);
 		git add .;
 		git commit -m "Chore: generate code by auto"
 		git push origin main;
@@ -104,7 +113,7 @@ local-yapi:
 commit-swagger:
 	@ for file in $(COMMIT_PROTO_FILES); \
 			do \
-			protoc -I . --openapiv2_out . $(ADD_COMMIT_LEFT)$${file#$(RM_COMMIT_LEFT)}; \
+			protoc -I . --openapiv2_out . $(add_commit_left)$${file#$(rm_commit_left)}; \
 			done
 
 # push swagger file to yapi
