@@ -17,11 +17,11 @@ plugins:
   - plugin: cpp
     out: gen/cpp
   - plugin: go
-    out: ./
-    opt:
-      - paths=source_relative
+    out: gen/go
+#    opt:
+#      - paths=source_relative
   - plugin: java
-    out: gen/cpp
+    out: gen/java
   - plugin: go-grpc
     out: ./
     opt:
