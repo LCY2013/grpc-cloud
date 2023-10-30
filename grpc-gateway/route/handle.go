@@ -6,19 +6,27 @@ import (
 	grpcgateway "github.com/LCY2013/grpc-cloud/grpc-gateway/proto"
 	"github.com/LCY2013/grpc-cloud/logger"
 	"net/http"
+	"strings"
 )
 
 var (
-	R = &Route{}
+	R = &Route{
+		tree: map[string]*node{},
+	}
 )
 
 type Route struct {
-	node
+	tree map[string]*node
 }
 
 // AddPath add path
 func (r *Route) AddPath(path string, annotation *grpcgateway.Annotation) {
-	r.node.addRoute(path, HandlersChain{func(writer http.ResponseWriter, request *http.Request, params Params) {
+	n, ok := R.tree[annotation.Method]
+	if !ok {
+		R.tree[annotation.Method] = &node{}
+		n = R.tree[annotation.Method]
+	}
+	n.addRoute(path, HandlersChain{func(writer http.ResponseWriter, request *http.Request, params Params) {
 		source, err := grpcgateway.GetDescSource(context.Background(), annotation.Address)
 		if err != nil {
 			_, _ = writer.Write([]byte(err.Error()))
@@ -67,7 +75,12 @@ func header(deader map[string][]string) (h []string) {
 
 func Init() {
 	http.HandleFunc("/", func(writer http.ResponseWriter, request *http.Request) {
-		handle, ps, tsr := R.getValue(request.RequestURI, func() *Params {
+		n, ok := R.tree[strings.ToUpper(request.Method)]
+		if !ok {
+			http.NotFound(writer, request)
+			return
+		}
+		handle, ps, tsr := n.getValue(request.RequestURI, func() *Params {
 			return &Params{}
 		})
 		if tsr {
