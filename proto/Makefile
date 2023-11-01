@@ -15,7 +15,7 @@ RM = rm -rf
 LN = ln -sf
 
 # buf
-BUF_BASE = gen
+BUF_BASE = protofiles
 buf_base=$(BUF_BASE)
 BUF_PATHS = --path $(buf_base)
 buf_paths=$(BUF_PATHS)
