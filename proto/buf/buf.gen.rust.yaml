@@ -1,0 +1,34 @@
+version: v1
+managed:
+  enabled: true
+  optimize_for: CODE_SIZE
+
+#https://buf.build/plugins
+plugins:
+########### RUST ###############
+#  remote rust plugin
+  - plugin: buf.build/community/neoeinstein-prost:v0.2.3
+    out: gen/rust
+    opt:
+      - compile_well_known_types
+      - extern_path=.google.protobuf=::pbjson_types
+  - plugin: buf.build/community/neoeinstein-prost-serde:v0.2.3
+    out: gen/rust
+  - plugin: buf.build/community/neoeinstein-tonic:v0.3.0
+    out: gen/rust
+#  - plugin: prost
+#    out: gen/rust
+#    opt:
+#      - compile_well_known_types
+#      - extern_path=.google.protobuf=::pbjson_types
+#  - plugin: prost-serde
+#    out: gen/rust
+#  - plugin: tonic
+#    out: gen/rust
+#    opt:
+#      - compile_well_known_types
+#      - extern_path=.google.protobuf=::pbjson_types
+#  - plugin: prost
+#    out: gen/rust
+#    opt:
+#        - gen_crate=Cargo.toml.tpl

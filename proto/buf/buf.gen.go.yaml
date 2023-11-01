@@ -1,0 +1,54 @@
+version: v1
+managed:
+  enabled: true
+  optimize_for: CODE_SIZE
+# single request: got 11, limit is 10
+  # go
+#  go_package_prefix:
+#    default: github.com/acme/weather/private/gen/proto/go
+#    except:
+#      - buf.build/googleapis/googleapis
+#    override:
+#      buf.build/acme/weather: github.com/acme/weather/gen/proto/go
+
+#https://buf.build/plugins
+plugins:
+########### GO ###############
+# local go plugin
+#  - plugin: go
+#    out: gen/go
+#    opt:
+#      - paths=source_relative
+#  - plugin: go-grpc
+#    out: gen/go
+#    opt:
+#      - paths=source_relative
+#      - require_unimplemented_servers=false
+# remote go plugin
+  - plugin: buf.build/grpc/go:v1.3.0
+    out: gen/go
+  # dependencies
+  - plugin: buf.build/protocolbuffers/go
+    out: gen/go
+#    opt:
+#      - paths=source_relative
+#    opt:
+#      - paths=source_relative
+  # dependencies
+#  - plugin: buf.build/protocolbuffers/go
+#    out: gen/go
+#    opt:
+#      - paths=source_relative
+
+########### other ###############
+#  - name: connect-go
+#    out: gen
+#    opt: paths=source_relative
+#  - plugin: grpc-gateway
+#      out: gen/go
+#      opt:
+#        - paths=source_relative
+#        - grpc_api_configuration=path/to/config.yaml
+#        - standalone=true
+#  - plugin: openapiv2
+#      out: gen/openapiv2

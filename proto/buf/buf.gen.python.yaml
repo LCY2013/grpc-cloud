@@ -1,0 +1,17 @@
+version: v1
+managed:
+  enabled: true
+  optimize_for: CODE_SIZE
+
+#https://buf.build/plugins
+plugins:
+########### PYTHON ###############
+# local python plugin
+#  - plugin: python
+#    out: gen/python
+# remote python plugin
+  - plugin: buf.build/grpc/python:v1.59.1
+    out: gen/python
+  # dependencies
+  - plugin: buf.build/protocolbuffers/python
+    out: gen/python

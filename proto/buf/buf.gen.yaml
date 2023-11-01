@@ -2,7 +2,7 @@ version: v1
 managed:
   enabled: true
   optimize_for: CODE_SIZE
-
+# single request: got 11, limit is 10
   # C++
   # go
 #  go_package_prefix:
@@ -57,6 +57,9 @@ plugins:
 #  remote cpp plugin
   - plugin: buf.build/grpc/cpp:v1.59.1
     out: gen/cpp
+  # dependencies
+  - plugin: buf.build/protocolbuffers/cpp
+    out: gen/cpp
 
 ########### JAVA ###############
 # local java plugin
@@ -64,6 +67,9 @@ plugins:
 #    out: gen/java
 # remote java plugin
   - plugin: buf.build/grpc/java:v1.59.0
+    out: gen/java
+  # dependencies
+  - plugin: buf.build/protocolbuffers/java
     out: gen/java
 
 ########### GO ###############
@@ -80,6 +86,11 @@ plugins:
 # remote go plugin
   - plugin: buf.build/grpc/go:v1.3.0
     out: gen/go
+  # dependencies
+  - plugin: buf.build/protocolbuffers/go
+    out: gen/go
+#    opt:
+#      - paths=source_relative
 #    opt:
 #      - paths=source_relative
   # dependencies
@@ -94,6 +105,9 @@ plugins:
 #    out: gen/python
 # remote python plugin
   - plugin: buf.build/grpc/python:v1.59.1
+    out: gen/python
+  # dependencies
+  - plugin: buf.build/protocolbuffers/python
     out: gen/python
 
 ########### other ###############
