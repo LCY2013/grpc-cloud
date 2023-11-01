@@ -8,4 +8,5 @@ pub struct PersonMessage {
     pub age: ::prost::alloc::string::String,
 }
 include!("grpc.person.service.v1.serde.rs");
+include!("grpc.person.service.v1.tonic.rs");
 // @@protoc_insertion_point(module)
