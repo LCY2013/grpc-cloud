@@ -55,7 +55,7 @@ struct TableStruct_gen_2fproto_2fperson_2dservice_2fperson_2dservice_2eproto {
 extern const ::google::protobuf::internal::DescriptorTable
     descriptor_table_gen_2fproto_2fperson_2dservice_2fperson_2dservice_2eproto;
 namespace grpc {
-namespace gateway {
+namespace person {
 namespace service {
 namespace v1 {
 class PersonMessage;
@@ -63,7 +63,7 @@ struct PersonMessageDefaultTypeInternal;
 extern PersonMessageDefaultTypeInternal _PersonMessage_default_instance_;
 }  // namespace v1
 }  // namespace service
-}  // namespace gateway
+}  // namespace person
 }  // namespace grpc
 namespace google {
 namespace protobuf {
@@ -71,7 +71,7 @@ namespace protobuf {
 }  // namespace google
 
 namespace grpc {
-namespace gateway {
+namespace person {
 namespace service {
 namespace v1 {
 
@@ -81,7 +81,7 @@ namespace v1 {
 // -------------------------------------------------------------------
 
 class PersonMessage final :
-    public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:grpc.gateway.service.v1.PersonMessage) */ {
+    public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:grpc.person.service.v1.PersonMessage) */ {
  public:
   inline PersonMessage() : PersonMessage(nullptr) {}
   ~PersonMessage() override;
@@ -176,7 +176,7 @@ class PersonMessage final :
   private:
   friend class ::google::protobuf::internal::AnyMetadata;
   static ::absl::string_view FullMessageName() {
-    return "grpc.gateway.service.v1.PersonMessage";
+    return "grpc.person.service.v1.PersonMessage";
   }
   protected:
   explicit PersonMessage(::google::protobuf::Arena* arena);
@@ -224,7 +224,7 @@ class PersonMessage final :
   std::string* _internal_mutable_age();
 
   public:
-  // @@protoc_insertion_point(class_scope:grpc.gateway.service.v1.PersonMessage)
+  // @@protoc_insertion_point(class_scope:grpc.person.service.v1.PersonMessage)
  private:
   class _Internal;
 
@@ -262,7 +262,7 @@ inline void PersonMessage::clear_name() {
   _impl_.name_.ClearToEmpty();
 }
 inline const std::string& PersonMessage::name() const {
-  // @@protoc_insertion_point(field_get:grpc.gateway.service.v1.PersonMessage.name)
+  // @@protoc_insertion_point(field_get:grpc.person.service.v1.PersonMessage.name)
   return _internal_name();
 }
 template <typename Arg_, typename... Args_>
@@ -271,11 +271,11 @@ inline PROTOBUF_ALWAYS_INLINE void PersonMessage::set_name(Arg_&& arg,
   PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
   ;
   _impl_.name_.Set(static_cast<Arg_&&>(arg), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:grpc.gateway.service.v1.PersonMessage.name)
+  // @@protoc_insertion_point(field_set:grpc.person.service.v1.PersonMessage.name)
 }
 inline std::string* PersonMessage::mutable_name() {
   std::string* _s = _internal_mutable_name();
-  // @@protoc_insertion_point(field_mutable:grpc.gateway.service.v1.PersonMessage.name)
+  // @@protoc_insertion_point(field_mutable:grpc.person.service.v1.PersonMessage.name)
   return _s;
 }
 inline const std::string& PersonMessage::_internal_name() const {
@@ -294,7 +294,7 @@ inline std::string* PersonMessage::_internal_mutable_name() {
 }
 inline std::string* PersonMessage::release_name() {
   PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
-  // @@protoc_insertion_point(field_release:grpc.gateway.service.v1.PersonMessage.name)
+  // @@protoc_insertion_point(field_release:grpc.person.service.v1.PersonMessage.name)
   return _impl_.name_.Release();
 }
 inline void PersonMessage::set_allocated_name(std::string* value) {
@@ -305,7 +305,7 @@ inline void PersonMessage::set_allocated_name(std::string* value) {
           _impl_.name_.Set("", GetArenaForAllocation());
         }
   #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:grpc.gateway.service.v1.PersonMessage.name)
+  // @@protoc_insertion_point(field_set_allocated:grpc.person.service.v1.PersonMessage.name)
 }
 
 // string age = 2 [json_name = "age"];
@@ -313,7 +313,7 @@ inline void PersonMessage::clear_age() {
   _impl_.age_.ClearToEmpty();
 }
 inline const std::string& PersonMessage::age() const {
-  // @@protoc_insertion_point(field_get:grpc.gateway.service.v1.PersonMessage.age)
+  // @@protoc_insertion_point(field_get:grpc.person.service.v1.PersonMessage.age)
   return _internal_age();
 }
 template <typename Arg_, typename... Args_>
@@ -322,11 +322,11 @@ inline PROTOBUF_ALWAYS_INLINE void PersonMessage::set_age(Arg_&& arg,
   PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
   ;
   _impl_.age_.Set(static_cast<Arg_&&>(arg), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:grpc.gateway.service.v1.PersonMessage.age)
+  // @@protoc_insertion_point(field_set:grpc.person.service.v1.PersonMessage.age)
 }
 inline std::string* PersonMessage::mutable_age() {
   std::string* _s = _internal_mutable_age();
-  // @@protoc_insertion_point(field_mutable:grpc.gateway.service.v1.PersonMessage.age)
+  // @@protoc_insertion_point(field_mutable:grpc.person.service.v1.PersonMessage.age)
   return _s;
 }
 inline const std::string& PersonMessage::_internal_age() const {
@@ -345,7 +345,7 @@ inline std::string* PersonMessage::_internal_mutable_age() {
 }
 inline std::string* PersonMessage::release_age() {
   PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
-  // @@protoc_insertion_point(field_release:grpc.gateway.service.v1.PersonMessage.age)
+  // @@protoc_insertion_point(field_release:grpc.person.service.v1.PersonMessage.age)
   return _impl_.age_.Release();
 }
 inline void PersonMessage::set_allocated_age(std::string* value) {
@@ -356,7 +356,7 @@ inline void PersonMessage::set_allocated_age(std::string* value) {
           _impl_.age_.Set("", GetArenaForAllocation());
         }
   #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:grpc.gateway.service.v1.PersonMessage.age)
+  // @@protoc_insertion_point(field_set_allocated:grpc.person.service.v1.PersonMessage.age)
 }
 
 #ifdef __GNUC__
@@ -366,7 +366,7 @@ inline void PersonMessage::set_allocated_age(std::string* value) {
 // @@protoc_insertion_point(namespace_scope)
 }  // namespace v1
 }  // namespace service
-}  // namespace gateway
+}  // namespace person
 }  // namespace grpc
 
 

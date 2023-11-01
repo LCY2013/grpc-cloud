@@ -19,7 +19,7 @@ PROTOBUF_PRAGMA_INIT_SEG
 namespace _pb = ::google::protobuf;
 namespace _pbi = ::google::protobuf::internal;
 namespace grpc {
-namespace gateway {
+namespace person {
 namespace service {
 namespace v1 {
         template <typename>
@@ -43,7 +43,7 @@ PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 StringMessageDefaultTypeInternal _StringMessage_default_instance_;
 }  // namespace v1
 }  // namespace service
-}  // namespace gateway
+}  // namespace person
 }  // namespace grpc
 static ::_pb::Metadata file_level_metadata_gen_2fproto_2fecho_2dservice_2fecho_2dservice_2eproto[1];
 static constexpr const ::_pb::EnumDescriptor**
@@ -53,52 +53,52 @@ static constexpr const ::_pb::ServiceDescriptor**
 const ::uint32_t TableStruct_gen_2fproto_2fecho_2dservice_2fecho_2dservice_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(
     protodesc_cold) = {
     ~0u,  // no _has_bits_
-    PROTOBUF_FIELD_OFFSET(::grpc::gateway::service::v1::StringMessage, _internal_metadata_),
+    PROTOBUF_FIELD_OFFSET(::grpc::person::service::v1::StringMessage, _internal_metadata_),
     ~0u,  // no _extensions_
     ~0u,  // no _oneof_case_
     ~0u,  // no _weak_field_map_
     ~0u,  // no _inlined_string_donated_
     ~0u,  // no _split_
     ~0u,  // no sizeof(Split)
-    PROTOBUF_FIELD_OFFSET(::grpc::gateway::service::v1::StringMessage, _impl_.value_),
+    PROTOBUF_FIELD_OFFSET(::grpc::person::service::v1::StringMessage, _impl_.value_),
 };
 
 static const ::_pbi::MigrationSchema
     schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
-        {0, -1, -1, sizeof(::grpc::gateway::service::v1::StringMessage)},
+        {0, -1, -1, sizeof(::grpc::person::service::v1::StringMessage)},
 };
 
 static const ::_pb::Message* const file_default_instances[] = {
-    &::grpc::gateway::service::v1::_StringMessage_default_instance_._instance,
+    &::grpc::person::service::v1::_StringMessage_default_instance_._instance,
 };
 const char descriptor_table_protodef_gen_2fproto_2fecho_2dservice_2fecho_2dservice_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
     "\n)gen/proto/echo-service/echo-service.pr"
-    "oto\022\027grpc.gateway.service.v1\032\034google/api"
-    "/annotations.proto\032;grpc-gateway/protoc-"
-    "gen-openapiv2/options/annotations.proto\""
-    "%\n\rStringMessage\022\024\n\005value\030\001 \001(\tR\005value2\242"
-    "\003\n\013EchoService\022\300\001\n\004Echo\022&.grpc.gateway.s"
-    "ervice.v1.StringMessage\032&.grpc.gateway.s"
-    "ervice.v1.StringMessage\"h\222A=\n\014echo-servi"
-    "ce\022\016echo a message\032\004desc*\ngetMessageJ\013\n\003"
-    "200\022\004\n\002OK\202\323\344\223\002\"\"\035/echo/service/v1/exampl"
-    "e/echo:\001*\022\317\001\n\014EchoCustomer\022&.grpc.gatewa"
-    "y.service.v1.StringMessage\032&.grpc.gatewa"
-    "y.service.v1.StringMessage\"o\222A=\n\014echo-se"
-    "rvice\022\016echo a message\032\004desc*\ngetMessageJ"
-    "\013\n\003200\022\004\n\002OK\202\323\344\223\002):\001*B$\n\001*\022\037/echo/servic"
-    "e/v1/example/echo/cB\270\003\n\032io.grpc.gateway."
-    "service.v1B\020EchoServiceProtoH\002Z\024grpc/ech"
-    "o/service/v1\242\002\003GGS\252\002\027Grpc.Gateway.Servic"
-    "e.V1\312\002\027Grpc\\Gateway\\Service\\V1\342\002#Grpc\\Ga"
-    "teway\\Service\\V1\\GPBMetadata\352\002\032Grpc::Gat"
-    "eway::Service::V1\222A\361\001\022\267\001\n\010Echo API\"O\n\024ec"
-    "ho_service project\022%https://github.com/L"
-    "CY2013/grpc-cloud\032\020none@example.com*U\n\032A"
-    "pache License Version 2.0\0227https://githu"
-    "b.com/LCY2013/grpc-cloud/blob/main/LICEN"
-    "SE2\0031.0*\001\0022\020application/json:\020applicatio"
-    "n/jsonj\016\n\014echo-serviceb\006proto3"
+    "oto\022\026grpc.person.service.v1\032\034google/api/"
+    "annotations.proto\032;grpc-gateway/protoc-g"
+    "en-openapiv2/options/annotations.proto\"%"
+    "\n\rStringMessage\022\024\n\005value\030\001 \001(\tR\005value2\236\003"
+    "\n\013EchoService\022\276\001\n\004Echo\022%.grpc.person.ser"
+    "vice.v1.StringMessage\032%.grpc.person.serv"
+    "ice.v1.StringMessage\"h\222A=\n\014echo-service\022"
+    "\016echo a message\032\004desc*\ngetMessageJ\013\n\003200"
+    "\022\004\n\002OK\202\323\344\223\002\"\"\035/echo/service/v1/example/e"
+    "cho:\001*\022\315\001\n\014EchoCustomer\022%.grpc.person.se"
+    "rvice.v1.StringMessage\032%.grpc.person.ser"
+    "vice.v1.StringMessage\"o\222A=\n\014echo-service"
+    "\022\016echo a message\032\004desc*\ngetMessageJ\013\n\00320"
+    "0\022\004\n\002OK\202\323\344\223\002):\001*B$\n\001*\022\037/echo/service/v1/"
+    "example/echo/cB\263\003\n\031io.grpc.person.servic"
+    "e.v1B\020EchoServiceProtoH\002Z\024grpc/echo/serv"
+    "ice/v1\242\002\003GPS\252\002\026Grpc.Person.Service.V1\312\002\026"
+    "Grpc\\Person\\Service\\V1\342\002\"Grpc\\Person\\Ser"
+    "vice\\V1\\GPBMetadata\352\002\031Grpc::Person::Serv"
+    "ice::V1\222A\361\001\022\267\001\n\010Echo API\"O\n\024echo_service"
+    " project\022%https://github.com/LCY2013/grp"
+    "c-cloud\032\020none@example.com*U\n\032Apache Lice"
+    "nse Version 2.0\0227https://github.com/LCY2"
+    "013/grpc-cloud/blob/main/LICENSE2\0031.0*\001\002"
+    "2\020application/json:\020application/jsonj\016\n\014"
+    "echo-serviceb\006proto3"
 };
 static const ::_pbi::DescriptorTable* const descriptor_table_gen_2fproto_2fecho_2dservice_2fecho_2dservice_2eproto_deps[2] =
     {
@@ -109,7 +109,7 @@ static ::absl::once_flag descriptor_table_gen_2fproto_2fecho_2dservice_2fecho_2d
 const ::_pbi::DescriptorTable descriptor_table_gen_2fproto_2fecho_2dservice_2fecho_2dservice_2eproto = {
     false,
     false,
-    1070,
+    1060,
     descriptor_table_protodef_gen_2fproto_2fecho_2dservice_2fecho_2dservice_2eproto,
     "gen/proto/echo-service/echo-service.proto",
     &descriptor_table_gen_2fproto_2fecho_2dservice_2fecho_2dservice_2eproto_once,
@@ -142,7 +142,7 @@ PROTOBUF_ATTRIBUTE_WEAK const ::_pbi::DescriptorTable* descriptor_table_gen_2fpr
 PROTOBUF_ATTRIBUTE_INIT_PRIORITY2
 static ::_pbi::AddDescriptorsRunner dynamic_init_dummy_gen_2fproto_2fecho_2dservice_2fecho_2dservice_2eproto(&descriptor_table_gen_2fproto_2fecho_2dservice_2fecho_2dservice_2eproto);
 namespace grpc {
-namespace gateway {
+namespace person {
 namespace service {
 namespace v1 {
 // ===================================================================
@@ -154,7 +154,7 @@ class StringMessage::_Internal {
 StringMessage::StringMessage(::google::protobuf::Arena* arena)
     : ::google::protobuf::Message(arena) {
   SharedCtor(arena);
-  // @@protoc_insertion_point(arena_constructor:grpc.gateway.service.v1.StringMessage)
+  // @@protoc_insertion_point(arena_constructor:grpc.person.service.v1.StringMessage)
 }
 StringMessage::StringMessage(const StringMessage& from) : ::google::protobuf::Message() {
   StringMessage* const _this = this;
@@ -173,7 +173,7 @@ StringMessage::StringMessage(const StringMessage& from) : ::google::protobuf::Me
     _this->_impl_.value_.Set(from._internal_value(), _this->GetArenaForAllocation());
   }
 
-  // @@protoc_insertion_point(copy_constructor:grpc.gateway.service.v1.StringMessage)
+  // @@protoc_insertion_point(copy_constructor:grpc.person.service.v1.StringMessage)
 }
 inline void StringMessage::SharedCtor(::_pb::Arena* arena) {
   (void)arena;
@@ -187,7 +187,7 @@ inline void StringMessage::SharedCtor(::_pb::Arena* arena) {
   #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
 }
 StringMessage::~StringMessage() {
-  // @@protoc_insertion_point(destructor:grpc.gateway.service.v1.StringMessage)
+  // @@protoc_insertion_point(destructor:grpc.person.service.v1.StringMessage)
   _internal_metadata_.Delete<::google::protobuf::UnknownFieldSet>();
   SharedDtor();
 }
@@ -211,7 +211,7 @@ void StringMessage::InternalSwap(StringMessage* other) {
 // @@protoc_insertion_point(namespace_scope)
 }  // namespace v1
 }  // namespace service
-}  // namespace gateway
+}  // namespace person
 }  // namespace grpc
 namespace google {
 namespace protobuf {

@@ -19,7 +19,7 @@ PROTOBUF_PRAGMA_INIT_SEG
 namespace _pb = ::google::protobuf;
 namespace _pbi = ::google::protobuf::internal;
 namespace grpc {
-namespace gateway {
+namespace person {
 namespace service {
 namespace v1 {
         template <typename>
@@ -47,7 +47,7 @@ PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 PersonMessageDefaultTypeInternal _PersonMessage_default_instance_;
 }  // namespace v1
 }  // namespace service
-}  // namespace gateway
+}  // namespace person
 }  // namespace grpc
 static ::_pb::Metadata file_level_metadata_gen_2fproto_2fperson_2dservice_2fperson_2dservice_2eproto[1];
 static constexpr const ::_pb::EnumDescriptor**
@@ -57,49 +57,49 @@ static constexpr const ::_pb::ServiceDescriptor**
 const ::uint32_t TableStruct_gen_2fproto_2fperson_2dservice_2fperson_2dservice_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(
     protodesc_cold) = {
     ~0u,  // no _has_bits_
-    PROTOBUF_FIELD_OFFSET(::grpc::gateway::service::v1::PersonMessage, _internal_metadata_),
+    PROTOBUF_FIELD_OFFSET(::grpc::person::service::v1::PersonMessage, _internal_metadata_),
     ~0u,  // no _extensions_
     ~0u,  // no _oneof_case_
     ~0u,  // no _weak_field_map_
     ~0u,  // no _inlined_string_donated_
     ~0u,  // no _split_
     ~0u,  // no sizeof(Split)
-    PROTOBUF_FIELD_OFFSET(::grpc::gateway::service::v1::PersonMessage, _impl_.name_),
-    PROTOBUF_FIELD_OFFSET(::grpc::gateway::service::v1::PersonMessage, _impl_.age_),
+    PROTOBUF_FIELD_OFFSET(::grpc::person::service::v1::PersonMessage, _impl_.name_),
+    PROTOBUF_FIELD_OFFSET(::grpc::person::service::v1::PersonMessage, _impl_.age_),
 };
 
 static const ::_pbi::MigrationSchema
     schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
-        {0, -1, -1, sizeof(::grpc::gateway::service::v1::PersonMessage)},
+        {0, -1, -1, sizeof(::grpc::person::service::v1::PersonMessage)},
 };
 
 static const ::_pb::Message* const file_default_instances[] = {
-    &::grpc::gateway::service::v1::_PersonMessage_default_instance_._instance,
+    &::grpc::person::service::v1::_PersonMessage_default_instance_._instance,
 };
 const char descriptor_table_protodef_gen_2fproto_2fperson_2dservice_2fperson_2dservice_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
     "\n-gen/proto/person-service/person-servic"
-    "e.proto\022\027grpc.gateway.service.v1\032\034google"
-    "/api/annotations.proto\032;grpc-gateway/pro"
-    "toc-gen-openapiv2/options/annotations.pr"
-    "oto\"5\n\rPersonMessage\022\022\n\004name\030\001 \001(\tR\004name"
-    "\022\020\n\003age\030\002 \001(\tR\003age2\324\001\n\rPersonService\022\302\001\n"
-    "\tGetPerson\022&.grpc.gateway.service.v1.Per"
-    "sonMessage\032&.grpc.gateway.service.v1.Per"
-    "sonMessage\"e\222AA\n\016person_service\022\021get a p"
-    "erson info\032\004desc*\tgetPersonJ\013\n\003200\022\004\n\002OK"
-    "\202\323\344\223\002\033\"\026/person/service/v1/get:\001*B\302\003\n\032io"
-    ".grpc.gateway.service.v1B\022PersonServiceP"
-    "rotoH\002Z\026grpc/person/service/v1\242\002\003GGS\252\002\027G"
-    "rpc.Gateway.Service.V1\312\002\027Grpc\\Gateway\\Se"
-    "rvice\\V1\342\002#Grpc\\Gateway\\Service\\V1\\GPBMe"
-    "tadata\352\002\032Grpc::Gateway::Service::V1\222A\367\001\022"
-    "\273\001\n\nPerson API\"Q\n\026person_service project"
-    "\022%https://github.com/LCY2013/grpc-cloud\032"
-    "\020none@example.com*U\n\032Apache License Vers"
-    "ion 2.0\0227https://github.com/LCY2013/grpc"
-    "-cloud/blob/main/LICENSE2\0031.0*\001\0022\020applic"
-    "ation/json:\020application/jsonj\020\n\016person_s"
-    "erviceb\006proto3"
+    "e.proto\022\026grpc.person.service.v1\032\034google/"
+    "api/annotations.proto\032;grpc-gateway/prot"
+    "oc-gen-openapiv2/options/annotations.pro"
+    "to\"5\n\rPersonMessage\022\022\n\004name\030\001 \001(\tR\004name\022"
+    "\020\n\003age\030\002 \001(\tR\003age2\322\001\n\rPersonService\022\300\001\n\t"
+    "GetPerson\022%.grpc.person.service.v1.Perso"
+    "nMessage\032%.grpc.person.service.v1.Person"
+    "Message\"e\222AA\n\016person_service\022\021get a pers"
+    "on info\032\004desc*\tgetPersonJ\013\n\003200\022\004\n\002OK\202\323\344"
+    "\223\002\033\"\026/person/service/v1/get:\001*B\275\003\n\031io.gr"
+    "pc.person.service.v1B\022PersonServiceProto"
+    "H\002Z\026grpc/person/service/v1\242\002\003GPS\252\002\026Grpc."
+    "Person.Service.V1\312\002\026Grpc\\Person\\Service\\"
+    "V1\342\002\"Grpc\\Person\\Service\\V1\\GPBMetadata\352"
+    "\002\031Grpc::Person::Service::V1\222A\367\001\022\273\001\n\nPers"
+    "on API\"Q\n\026person_service project\022%https:"
+    "//github.com/LCY2013/grpc-cloud\032\020none@ex"
+    "ample.com*U\n\032Apache License Version 2.0\022"
+    "7https://github.com/LCY2013/grpc-cloud/b"
+    "lob/main/LICENSE2\0031.0*\001\0022\020application/js"
+    "on:\020application/jsonj\020\n\016person_serviceb\006"
+    "proto3"
 };
 static const ::_pbi::DescriptorTable* const descriptor_table_gen_2fproto_2fperson_2dservice_2fperson_2dservice_2eproto_deps[2] =
     {
@@ -110,7 +110,7 @@ static ::absl::once_flag descriptor_table_gen_2fproto_2fperson_2dservice_2fperso
 const ::_pbi::DescriptorTable descriptor_table_gen_2fproto_2fperson_2dservice_2fperson_2dservice_2eproto = {
     false,
     false,
-    894,
+    886,
     descriptor_table_protodef_gen_2fproto_2fperson_2dservice_2fperson_2dservice_2eproto,
     "gen/proto/person-service/person-service.proto",
     &descriptor_table_gen_2fproto_2fperson_2dservice_2fperson_2dservice_2eproto_once,
@@ -143,7 +143,7 @@ PROTOBUF_ATTRIBUTE_WEAK const ::_pbi::DescriptorTable* descriptor_table_gen_2fpr
 PROTOBUF_ATTRIBUTE_INIT_PRIORITY2
 static ::_pbi::AddDescriptorsRunner dynamic_init_dummy_gen_2fproto_2fperson_2dservice_2fperson_2dservice_2eproto(&descriptor_table_gen_2fproto_2fperson_2dservice_2fperson_2dservice_2eproto);
 namespace grpc {
-namespace gateway {
+namespace person {
 namespace service {
 namespace v1 {
 // ===================================================================
@@ -155,7 +155,7 @@ class PersonMessage::_Internal {
 PersonMessage::PersonMessage(::google::protobuf::Arena* arena)
     : ::google::protobuf::Message(arena) {
   SharedCtor(arena);
-  // @@protoc_insertion_point(arena_constructor:grpc.gateway.service.v1.PersonMessage)
+  // @@protoc_insertion_point(arena_constructor:grpc.person.service.v1.PersonMessage)
 }
 PersonMessage::PersonMessage(const PersonMessage& from) : ::google::protobuf::Message() {
   PersonMessage* const _this = this;
@@ -182,7 +182,7 @@ PersonMessage::PersonMessage(const PersonMessage& from) : ::google::protobuf::Me
     _this->_impl_.age_.Set(from._internal_age(), _this->GetArenaForAllocation());
   }
 
-  // @@protoc_insertion_point(copy_constructor:grpc.gateway.service.v1.PersonMessage)
+  // @@protoc_insertion_point(copy_constructor:grpc.person.service.v1.PersonMessage)
 }
 inline void PersonMessage::SharedCtor(::_pb::Arena* arena) {
   (void)arena;
@@ -201,7 +201,7 @@ inline void PersonMessage::SharedCtor(::_pb::Arena* arena) {
   #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
 }
 PersonMessage::~PersonMessage() {
-  // @@protoc_insertion_point(destructor:grpc.gateway.service.v1.PersonMessage)
+  // @@protoc_insertion_point(destructor:grpc.person.service.v1.PersonMessage)
   _internal_metadata_.Delete<::google::protobuf::UnknownFieldSet>();
   SharedDtor();
 }
@@ -226,7 +226,7 @@ void PersonMessage::InternalSwap(PersonMessage* other) {
 // @@protoc_insertion_point(namespace_scope)
 }  // namespace v1
 }  // namespace service
-}  // namespace gateway
+}  // namespace person
 }  // namespace grpc
 namespace google {
 namespace protobuf {

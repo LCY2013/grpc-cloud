@@ -19,8 +19,8 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	EchoService_Echo_FullMethodName         = "/grpc.gateway.service.v1.EchoService/Echo"
-	EchoService_EchoCustomer_FullMethodName = "/grpc.gateway.service.v1.EchoService/EchoCustomer"
+	EchoService_Echo_FullMethodName         = "/grpc.person.service.v1.EchoService/Echo"
+	EchoService_EchoCustomer_FullMethodName = "/grpc.person.service.v1.EchoService/EchoCustomer"
 )
 
 // EchoServiceClient is the client API for EchoService service.
@@ -127,7 +127,7 @@ func _EchoService_EchoCustomer_Handler(srv interface{}, ctx context.Context, dec
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var EchoService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "grpc.gateway.service.v1.EchoService",
+	ServiceName: "grpc.person.service.v1.EchoService",
 	HandlerType: (*EchoServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{

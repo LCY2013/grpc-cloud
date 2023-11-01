@@ -19,7 +19,7 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	PersonService_GetPerson_FullMethodName = "/grpc.gateway.service.v1.PersonService/GetPerson"
+	PersonService_GetPerson_FullMethodName = "/grpc.person.service.v1.PersonService/GetPerson"
 )
 
 // PersonServiceClient is the client API for PersonService service.
@@ -94,7 +94,7 @@ func _PersonService_GetPerson_Handler(srv interface{}, ctx context.Context, dec 
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var PersonService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "grpc.gateway.service.v1.PersonService",
+	ServiceName: "grpc.person.service.v1.PersonService",
 	HandlerType: (*PersonServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
