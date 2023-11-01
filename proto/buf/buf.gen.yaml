@@ -6,12 +6,19 @@ managed:
   # C++
   # go
 #  go_package_prefix:
-#    default: go
-
+#    default: github.com/acme/weather/private/gen/proto/go
+#    except:
+#      - buf.build/googleapis/googleapis
+#    override:
+#      buf.build/acme/weather: github.com/acme/weather/gen/proto/go
   # Java
+
   java_multiple_files: false
   java_package_prefix: { default: io }
   java_string_check_utf8: false
+#  override:
+#    JAVA_PACKAGE:
+#      acme/weather/v1/weather.proto: "org"
 
 plugins:
   - plugin: cpp
@@ -27,6 +34,16 @@ plugins:
     opt:
 #      - paths=source_relative
       - require_unimplemented_servers=false
+  - plugin: python
+    out: gen/python
 #  - name: connect-go
 #    out: gen
 #    opt: paths=source_relative
+#  - plugin: grpc-gateway
+#      out: gen/go
+#      opt:
+#        - paths=source_relative
+#        - grpc_api_configuration=path/to/config.yaml
+#        - standalone=true
+#  - plugin: openapiv2
+#      out: gen/openapiv2
