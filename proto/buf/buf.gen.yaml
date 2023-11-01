@@ -47,21 +47,35 @@ plugins:
 #    out: gen/rust
 #    opt:
 #        - gen_crate=Cargo.toml.tpl
+
   - plugin: cpp
     out: gen/cpp
+
   - plugin: java
     out: gen/java
-  - plugin: go
+
+#  - plugin: go
+#    out: gen/go
+#    opt:
+#      - paths=source_relative
+#  - plugin: go-grpc
+#    out: gen/go
+#    opt:
+#      - paths=source_relative
+#      - require_unimplemented_servers=false
+  - plugin: buf.build/grpc/go:v1.3.0
     out: gen/go
 #    opt:
 #      - paths=source_relative
-  - plugin: go-grpc
+  # dependencies
+  - plugin: buf.build/protocolbuffers/go
     out: gen/go
     opt:
-#      - paths=source_relative
-      - require_unimplemented_servers=false
+      - paths=source_relative
+
   - plugin: python
     out: gen/python
+
 #  - name: connect-go
 #    out: gen
 #    opt: paths=source_relative

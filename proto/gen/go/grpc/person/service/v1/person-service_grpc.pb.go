@@ -47,19 +47,21 @@ func (c *personServiceClient) GetPerson(ctx context.Context, in *PersonMessage, 
 }
 
 // PersonServiceServer is the server API for PersonService service.
-// All implementations should embed UnimplementedPersonServiceServer
+// All implementations must embed UnimplementedPersonServiceServer
 // for forward compatibility
 type PersonServiceServer interface {
 	GetPerson(context.Context, *PersonMessage) (*PersonMessage, error)
+	mustEmbedUnimplementedPersonServiceServer()
 }
 
-// UnimplementedPersonServiceServer should be embedded to have forward compatible implementations.
+// UnimplementedPersonServiceServer must be embedded to have forward compatible implementations.
 type UnimplementedPersonServiceServer struct {
 }
 
 func (UnimplementedPersonServiceServer) GetPerson(context.Context, *PersonMessage) (*PersonMessage, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetPerson not implemented")
 }
+func (UnimplementedPersonServiceServer) mustEmbedUnimplementedPersonServiceServer() {}
 
 // UnsafePersonServiceServer may be embedded to opt out of forward compatibility for this service.
 // Use of this interface is not recommended, as added methods to PersonServiceServer will
