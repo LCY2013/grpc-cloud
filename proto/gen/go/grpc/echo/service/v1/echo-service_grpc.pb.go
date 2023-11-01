@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.3.0
 // - protoc             (unknown)
-// source: gen/prototpl/echo-service/echo-service.proto
+// source: prototpl/echo-service/echo-service.proto
 
 package v1
 
@@ -140,5 +140,5 @@ var EchoService_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "gen/prototpl/echo-service/echo-service.proto",
+	Metadata: "prototpl/echo-service/echo-service.proto",
 }

@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.3.0
 // - protoc             (unknown)
-// source: gen/prototpl/person-service/person-service.proto
+// source: prototpl/person-service/person-service.proto
 
 package v1
 
@@ -103,5 +103,5 @@ var PersonService_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "gen/prototpl/person-service/person-service.proto",
+	Metadata: "prototpl/person-service/person-service.proto",
 }
