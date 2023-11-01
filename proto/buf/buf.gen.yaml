@@ -20,7 +20,26 @@ managed:
 #    JAVA_PACKAGE:
 #      acme/weather/v1/weather.proto: "org"
 
+#https://buf.build/plugins
 plugins:
+  - plugin: buf.build/community/neoeinstein-prost:v0.2.3
+    out: gen
+#  - plugin: prost
+#    out: gen/rust
+#    opt:
+#      - compile_well_known_types
+#      - extern_path=.google.protobuf=::pbjson_types
+#  - plugin: prost-serde
+#    out: gen/rust
+#  - plugin: tonic
+#    out: gen/rust
+#    opt:
+#      - compile_well_known_types
+#      - extern_path=.google.protobuf=::pbjson_types
+#  - plugin: prost
+#    out: gen/rust
+#    opt:
+#        - gen_crate=Cargo.toml.tpl
   - plugin: cpp
     out: gen/cpp
   - plugin: java
