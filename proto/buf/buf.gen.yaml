@@ -24,9 +24,7 @@ managed:
 plugins:
   - plugin: buf.build/community/neoeinstein-prost:v0.2.3
     out: gen/rust
-    opt:
-      - compile_well_known_types
-      - extern_path=.google.protobuf=::pbjson_types
+
 #  - plugin: prost
 #    out: gen/rust
 #    opt:
