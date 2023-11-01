@@ -68,10 +68,10 @@ plugins:
 #    opt:
 #      - paths=source_relative
   # dependencies
-  - plugin: buf.build/protocolbuffers/go
-    out: gen/go
-    opt:
-      - paths=source_relative
+#  - plugin: buf.build/protocolbuffers/go
+#    out: gen/go
+#    opt:
+#      - paths=source_relative
 
   - plugin: python
     out: gen/python
