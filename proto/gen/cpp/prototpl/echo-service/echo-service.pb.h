@@ -55,7 +55,7 @@ struct TableStruct_prototpl_2fecho_2dservice_2fecho_2dservice_2eproto {
 extern const ::google::protobuf::internal::DescriptorTable
     descriptor_table_prototpl_2fecho_2dservice_2fecho_2dservice_2eproto;
 namespace grpc {
-namespace person {
+namespace echo {
 namespace service {
 namespace v1 {
 class StringMessage;
@@ -63,7 +63,7 @@ struct StringMessageDefaultTypeInternal;
 extern StringMessageDefaultTypeInternal _StringMessage_default_instance_;
 }  // namespace v1
 }  // namespace service
-}  // namespace person
+}  // namespace echo
 }  // namespace grpc
 namespace google {
 namespace protobuf {
@@ -71,7 +71,7 @@ namespace protobuf {
 }  // namespace google
 
 namespace grpc {
-namespace person {
+namespace echo {
 namespace service {
 namespace v1 {
 
@@ -81,7 +81,7 @@ namespace v1 {
 // -------------------------------------------------------------------
 
 class StringMessage final :
-    public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:grpc.person.service.v1.StringMessage) */ {
+    public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:grpc.echo.service.v1.StringMessage) */ {
  public:
   inline StringMessage() : StringMessage(nullptr) {}
   ~StringMessage() override;
@@ -176,7 +176,7 @@ class StringMessage final :
   private:
   friend class ::google::protobuf::internal::AnyMetadata;
   static ::absl::string_view FullMessageName() {
-    return "grpc.person.service.v1.StringMessage";
+    return "grpc.echo.service.v1.StringMessage";
   }
   protected:
   explicit StringMessage(::google::protobuf::Arena* arena);
@@ -207,7 +207,7 @@ class StringMessage final :
   std::string* _internal_mutable_value();
 
   public:
-  // @@protoc_insertion_point(class_scope:grpc.person.service.v1.StringMessage)
+  // @@protoc_insertion_point(class_scope:grpc.echo.service.v1.StringMessage)
  private:
   class _Internal;
 
@@ -244,7 +244,7 @@ inline void StringMessage::clear_value() {
   _impl_.value_.ClearToEmpty();
 }
 inline const std::string& StringMessage::value() const {
-  // @@protoc_insertion_point(field_get:grpc.person.service.v1.StringMessage.value)
+  // @@protoc_insertion_point(field_get:grpc.echo.service.v1.StringMessage.value)
   return _internal_value();
 }
 template <typename Arg_, typename... Args_>
@@ -253,11 +253,11 @@ inline PROTOBUF_ALWAYS_INLINE void StringMessage::set_value(Arg_&& arg,
   PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
   ;
   _impl_.value_.Set(static_cast<Arg_&&>(arg), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:grpc.person.service.v1.StringMessage.value)
+  // @@protoc_insertion_point(field_set:grpc.echo.service.v1.StringMessage.value)
 }
 inline std::string* StringMessage::mutable_value() {
   std::string* _s = _internal_mutable_value();
-  // @@protoc_insertion_point(field_mutable:grpc.person.service.v1.StringMessage.value)
+  // @@protoc_insertion_point(field_mutable:grpc.echo.service.v1.StringMessage.value)
   return _s;
 }
 inline const std::string& StringMessage::_internal_value() const {
@@ -276,7 +276,7 @@ inline std::string* StringMessage::_internal_mutable_value() {
 }
 inline std::string* StringMessage::release_value() {
   PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
-  // @@protoc_insertion_point(field_release:grpc.person.service.v1.StringMessage.value)
+  // @@protoc_insertion_point(field_release:grpc.echo.service.v1.StringMessage.value)
   return _impl_.value_.Release();
 }
 inline void StringMessage::set_allocated_value(std::string* value) {
@@ -287,7 +287,7 @@ inline void StringMessage::set_allocated_value(std::string* value) {
           _impl_.value_.Set("", GetArenaForAllocation());
         }
   #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:grpc.person.service.v1.StringMessage.value)
+  // @@protoc_insertion_point(field_set_allocated:grpc.echo.service.v1.StringMessage.value)
 }
 
 #ifdef __GNUC__
@@ -297,7 +297,7 @@ inline void StringMessage::set_allocated_value(std::string* value) {
 // @@protoc_insertion_point(namespace_scope)
 }  // namespace v1
 }  // namespace service
-}  // namespace person
+}  // namespace echo
 }  // namespace grpc
 
 
