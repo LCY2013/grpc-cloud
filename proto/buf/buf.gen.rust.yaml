@@ -3,32 +3,41 @@ managed:
   enabled: true
   optimize_for: CODE_SIZE
 
+#https://github.com/neoeinstein/protoc-gen-prost
 #https://buf.build/plugins
 plugins:
 ########### RUST ###############
 #  remote rust plugin
-  - plugin: buf.build/community/neoeinstein-prost:v0.2.3
-    out: gen/rust
+#  - plugin: buf.build/community/neoeinstein-prost:v0.2.3
+#    out: gen/rust/src
+#    opt:
+#      - compile_well_known_types
+#      - extern_path=.google.protobuf=::pbjson_types
+#      - bytes=.
+#      - file_descriptor_set
+#  - plugin: buf.build/community/neoeinstein-prost-serde:v0.2.3
+#    out: gen/rust
+#  - plugin: buf.build/community/neoeinstein-tonic:v0.3.0
+#    out: gen/rust
+#  - plugin: buf.build/community/neoeinstein-prost-crate:v0.3.1
+#    out: gen/rust
+# local rust plugin
+  - plugin: prost
+    out: gen/rust/src
+    opt:
+      - default_package_filename=grpc
+      - compile_well_known_types
+      - extern_path=.google.protobuf=::pbjson_types
+  - plugin: prost-serde
+    out: gen/rust/src
+  - plugin: tonic
+    out: gen/rust/src
     opt:
       - compile_well_known_types
       - extern_path=.google.protobuf=::pbjson_types
-  - plugin: buf.build/community/neoeinstein-prost-serde:v0.2.3
+  - plugin: prost-crate
     out: gen/rust
-  - plugin: buf.build/community/neoeinstein-tonic:v0.3.0
-    out: gen/rust
-#  - plugin: prost
-#    out: gen/rust
-#    opt:
-#      - compile_well_known_types
-#      - extern_path=.google.protobuf=::pbjson_types
-#  - plugin: prost-serde
-#    out: gen/rust
-#  - plugin: tonic
-#    out: gen/rust
-#    opt:
-#      - compile_well_known_types
-#      - extern_path=.google.protobuf=::pbjson_types
-#  - plugin: prost
-#    out: gen/rust
-#    opt:
-#        - gen_crate=Cargo.toml.tpl
+    strategy: all
+    opt:
+      - include_file=src/mod.rs
+      - gen_crate=gen/rust/Cargo.toml

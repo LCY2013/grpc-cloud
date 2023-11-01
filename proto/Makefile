@@ -61,8 +61,8 @@ help:
 .PHONY: generate swagger del-swagger local-swagger yapi local-yapi commit-swagger commit-yapi tree-proto tree-dir
 
 # generate proto buf and push code
+#buf generate --template buf/buf.gen.yaml $(buf_paths);
 generate:
-		#buf generate --template buf/buf.gen.yaml $(buf_paths);
 		buf generate --template buf/buf.gen.go.yaml $(buf_paths);
 		buf generate --template buf/buf.gen.java.yaml $(buf_paths);
 		buf generate --template buf/buf.gen.cpp.yaml $(buf_paths);
