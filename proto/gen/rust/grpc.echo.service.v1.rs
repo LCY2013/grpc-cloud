@@ -5,4 +5,5 @@ pub struct StringMessage {
     #[prost(string, tag="1")]
     pub value: ::prost::alloc::string::String,
 }
+include!("grpc.echo.service.v1.serde.rs");
 // @@protoc_insertion_point(module)
