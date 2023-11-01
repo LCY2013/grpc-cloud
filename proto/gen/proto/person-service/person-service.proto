@@ -1,5 +1,5 @@
 syntax = "proto3";
-package grpc.gateway.service.v1;
+package grpc.person.service.v1;
 option go_package = "grpc/person/service/v1";
 
 import "google/api/annotations.proto";
