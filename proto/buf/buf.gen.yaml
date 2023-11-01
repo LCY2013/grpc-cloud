@@ -56,7 +56,7 @@ plugins:
 #    out: gen/cpp
 #  remote cpp plugin
   - plugin: buf.build/grpc/cpp:v1.59.1
-    out: gen
+    out: gen/cpp
 
 ########### JAVA ###############
 # local java plugin
@@ -64,7 +64,7 @@ plugins:
 #    out: gen/java
 # remote java plugin
   - plugin: buf.build/grpc/java:v1.59.0
-    out: gen
+    out: gen/java
 
 ########### GO ###############
 # local go plugin
@@ -94,7 +94,7 @@ plugins:
 #    out: gen/python
 # remote python plugin
   - plugin: buf.build/grpc/python:v1.59.1
-    out: gen
+    out: gen/python
 
 ########### other ###############
 #  - name: connect-go
