@@ -22,6 +22,8 @@ managed:
 
 #https://buf.build/plugins
 plugins:
+########### RUST ###############
+#  remote rust plugin
   - plugin: buf.build/community/neoeinstein-prost:v0.2.3
     out: gen/rust
     opt:
@@ -48,12 +50,24 @@ plugins:
 #    opt:
 #        - gen_crate=Cargo.toml.tpl
 
-  - plugin: cpp
-    out: gen/cpp
+########### CPP ###############
+# local cpp plugin
+#  - plugin: cpp
+#    out: gen/cpp
+#  remote cpp plugin
+  - plugin: buf.build/grpc/cpp:v1.59.1
+    out: gen
 
-  - plugin: java
-    out: gen/java
+########### JAVA ###############
+# local java plugin
+#  - plugin: java
+#    out: gen/java
+# remote java plugin
+  - plugin: buf.build/grpc/java:v1.59.0
+    out: gen
 
+########### GO ###############
+# local go plugin
 #  - plugin: go
 #    out: gen/go
 #    opt:
@@ -63,6 +77,7 @@ plugins:
 #    opt:
 #      - paths=source_relative
 #      - require_unimplemented_servers=false
+# remote go plugin
   - plugin: buf.build/grpc/go:v1.3.0
     out: gen/go
 #    opt:
@@ -73,9 +88,15 @@ plugins:
 #    opt:
 #      - paths=source_relative
 
-  - plugin: python
-    out: gen/python
+########### PYTHON ###############
+# local python plugin
+#  - plugin: python
+#    out: gen/python
+# remote python plugin
+  - plugin: buf.build/grpc/python:v1.59.1
+    out: gen
 
+########### other ###############
 #  - name: connect-go
 #    out: gen
 #    opt: paths=source_relative
