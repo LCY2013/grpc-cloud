@@ -30,6 +30,8 @@ plugins:
   # dependencies
   - plugin: buf.build/protocolbuffers/go
     out: gen/go
+  - plugin: buf.build/bufbuild/validate-go
+    out: gen
 #    opt:
 #      - paths=source_relative
 #    opt:
