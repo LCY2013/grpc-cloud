@@ -4,6 +4,7 @@ option go_package = "grpc/echo/service/v1";
 
 import "google/api/annotations.proto";
 import "grpc-gateway/protoc-gen-openapiv2/options/annotations.proto";
+import "protoc-gen-validate/validate/validate.proto";
 
 option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
   info: {
@@ -29,7 +30,7 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 };
 
 message StringMessage {
-  string value = 1;
+  string value = 1 [(validate.rules).string = { min_len: 10 }];
 }
 
 service EchoService {

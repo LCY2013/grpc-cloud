@@ -22,15 +22,17 @@ namespace grpc {
 namespace echo {
 namespace service {
 namespace v1 {
-        template <typename>
+
+inline constexpr StringMessage::Impl_::Impl_(
+    ::_pbi::ConstantInitialized) noexcept
+      : value_(
+            &::google::protobuf::internal::fixed_address_empty_string,
+            ::_pbi::ConstantInitialized()),
+        _cached_size_{0} {}
+
+template <typename>
 PROTOBUF_CONSTEXPR StringMessage::StringMessage(::_pbi::ConstantInitialized)
-    : _impl_{
-      /*decltype(_impl_.value_)*/ {
-          &::_pbi::fixed_address_empty_string,
-          ::_pbi::ConstantInitialized{},
-      },
-      /*decltype(_impl_._cached_size_)*/ {},
-    } {}
+    : _impl_(::_pbi::ConstantInitialized()) {}
 struct StringMessageDefaultTypeInternal {
   PROTOBUF_CONSTEXPR StringMessageDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
   ~StringMessageDefaultTypeInternal() {}
@@ -75,46 +77,48 @@ const char descriptor_table_protodef_prototpl_2fecho_2dservice_2fecho_2dservice_
     "\n(prototpl/echo-service/echo-service.pro"
     "to\022\024grpc.echo.service.v1\032\034google/api/ann"
     "otations.proto\032;grpc-gateway/protoc-gen-"
-    "openapiv2/options/annotations.proto\"%\n\rS"
-    "tringMessage\022\024\n\005value\030\001 \001(\tR\005value2\226\003\n\013E"
-    "choService\022\272\001\n\004Echo\022#.grpc.echo.service."
-    "v1.StringMessage\032#.grpc.echo.service.v1."
-    "StringMessage\"h\222A=\n\014echo-service\022\016echo a"
-    " message\032\004desc*\ngetMessageJ\013\n\003200\022\004\n\002OK\202"
-    "\323\344\223\002\"\"\035/echo/service/v1/example/echo:\001*\022"
-    "\311\001\n\014EchoCustomer\022#.grpc.echo.service.v1."
-    "StringMessage\032#.grpc.echo.service.v1.Str"
-    "ingMessage\"o\222A=\n\014echo-service\022\016echo a me"
-    "ssage\032\004desc*\ngetMessageJ\013\n\003200\022\004\n\002OK\202\323\344\223"
-    "\002):\001*B$\n\001*\022\037/echo/service/v1/example/ech"
-    "o/cB\256\003\n\030com.grpc.echo.service.v1B\020EchoSe"
-    "rviceProtoH\002P\001Z\024grpc/echo/service/v1\242\002\003G"
-    "ES\252\002\024Grpc.Echo.Service.V1\312\002\025Grpc\\Echo_\\S"
-    "ervice\\V1\342\002!Grpc\\Echo_\\Service\\V1\\GPBMet"
-    "adata\352\002\027Grpc::Echo::Service::V1\222A\361\001\022\267\001\n\010"
-    "Echo API\"O\n\024echo_service project\022%https:"
-    "//github.com/LCY2013/grpc-cloud\032\020none@ex"
-    "ample.com*U\n\032Apache License Version 2.0\022"
-    "7https://github.com/LCY2013/grpc-cloud/b"
-    "lob/main/LICENSE2\0031.0*\001\0022\020application/js"
-    "on:\020application/jsonj\016\n\014echo-serviceb\006pr"
-    "oto3"
+    "openapiv2/options/annotations.proto\032+pro"
+    "toc-gen-validate/validate/validate.proto"
+    "\".\n\rStringMessage\022\035\n\005value\030\001 \001(\tB\007\372B\004r\002\020"
+    "\nR\005value2\226\003\n\013EchoService\022\272\001\n\004Echo\022#.grpc"
+    ".echo.service.v1.StringMessage\032#.grpc.ec"
+    "ho.service.v1.StringMessage\"h\222A=\n\014echo-s"
+    "ervice\022\016echo a message\032\004desc*\ngetMessage"
+    "J\013\n\003200\022\004\n\002OK\202\323\344\223\002\"\"\035/echo/service/v1/ex"
+    "ample/echo:\001*\022\311\001\n\014EchoCustomer\022#.grpc.ec"
+    "ho.service.v1.StringMessage\032#.grpc.echo."
+    "service.v1.StringMessage\"o\222A=\n\014echo-serv"
+    "ice\022\016echo a message\032\004desc*\ngetMessageJ\013\n"
+    "\003200\022\004\n\002OK\202\323\344\223\002):\001*B$\n\001*\022\037/echo/service/"
+    "v1/example/echo/cB\256\003\n\030com.grpc.echo.serv"
+    "ice.v1B\020EchoServiceProtoH\002P\001Z\024grpc/echo/"
+    "service/v1\242\002\003GES\252\002\024Grpc.Echo.Service.V1\312"
+    "\002\025Grpc\\Echo_\\Service\\V1\342\002!Grpc\\Echo_\\Ser"
+    "vice\\V1\\GPBMetadata\352\002\027Grpc::Echo::Servic"
+    "e::V1\222A\361\001\022\267\001\n\010Echo API\"O\n\024echo_service p"
+    "roject\022%https://github.com/LCY2013/grpc-"
+    "cloud\032\020none@example.com*U\n\032Apache Licens"
+    "e Version 2.0\0227https://github.com/LCY201"
+    "3/grpc-cloud/blob/main/LICENSE2\0031.0*\001\0022\020"
+    "application/json:\020application/jsonj\016\n\014ec"
+    "ho-serviceb\006proto3"
 };
-static const ::_pbi::DescriptorTable* const descriptor_table_prototpl_2fecho_2dservice_2fecho_2dservice_2eproto_deps[2] =
+static const ::_pbi::DescriptorTable* const descriptor_table_prototpl_2fecho_2dservice_2fecho_2dservice_2eproto_deps[3] =
     {
         &::descriptor_table_google_2fapi_2fannotations_2eproto,
         &::descriptor_table_grpc_2dgateway_2fprotoc_2dgen_2dopenapiv2_2foptions_2fannotations_2eproto,
+        &::descriptor_table_protoc_2dgen_2dvalidate_2fvalidate_2fvalidate_2eproto,
 };
 static ::absl::once_flag descriptor_table_prototpl_2fecho_2dservice_2fecho_2dservice_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_prototpl_2fecho_2dservice_2fecho_2dservice_2eproto = {
     false,
     false,
-    1044,
+    1098,
     descriptor_table_protodef_prototpl_2fecho_2dservice_2fecho_2dservice_2eproto,
     "prototpl/echo-service/echo-service.proto",
     &descriptor_table_prototpl_2fecho_2dservice_2fecho_2dservice_2eproto_once,
     descriptor_table_prototpl_2fecho_2dservice_2fecho_2dservice_2eproto_deps,
-    2,
+    3,
     1,
     schemas,
     file_default_instances,
@@ -156,35 +160,32 @@ StringMessage::StringMessage(::google::protobuf::Arena* arena)
   SharedCtor(arena);
   // @@protoc_insertion_point(arena_constructor:grpc.echo.service.v1.StringMessage)
 }
-StringMessage::StringMessage(const StringMessage& from) : ::google::protobuf::Message() {
+inline PROTOBUF_NDEBUG_INLINE StringMessage::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility, ::google::protobuf::Arena* arena,
+    const Impl_& from)
+      : value_(arena, from.value_),
+        _cached_size_{0} {}
+
+StringMessage::StringMessage(
+    ::google::protobuf::Arena* arena,
+    const StringMessage& from)
+    : ::google::protobuf::Message(arena) {
   StringMessage* const _this = this;
   (void)_this;
-  new (&_impl_) Impl_{
-      decltype(_impl_.value_){},
-      /*decltype(_impl_._cached_size_)*/ {},
-  };
   _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
       from._internal_metadata_);
-  _impl_.value_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-        _impl_.value_.Set("", GetArenaForAllocation());
-  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (!from._internal_value().empty()) {
-    _this->_impl_.value_.Set(from._internal_value(), _this->GetArenaForAllocation());
-  }
+  new (&_impl_) Impl_(internal_visibility(), arena, from._impl_);
 
   // @@protoc_insertion_point(copy_constructor:grpc.echo.service.v1.StringMessage)
 }
+inline PROTOBUF_NDEBUG_INLINE StringMessage::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility,
+    ::google::protobuf::Arena* arena)
+      : value_(arena),
+        _cached_size_{0} {}
+
 inline void StringMessage::SharedCtor(::_pb::Arena* arena) {
-  (void)arena;
-  new (&_impl_) Impl_{
-      decltype(_impl_.value_){},
-      /*decltype(_impl_._cached_size_)*/ {},
-  };
-  _impl_.value_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-        _impl_.value_.Set("", GetArenaForAllocation());
-  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  new (&_impl_) Impl_(internal_visibility(), arena);
 }
 StringMessage::~StringMessage() {
   // @@protoc_insertion_point(destructor:grpc.echo.service.v1.StringMessage)
@@ -192,14 +193,15 @@ StringMessage::~StringMessage() {
   SharedDtor();
 }
 inline void StringMessage::SharedDtor() {
-  ABSL_DCHECK(GetArenaForAllocation() == nullptr);
+  ABSL_DCHECK(GetArena() == nullptr);
   _impl_.value_.Destroy();
-}
-void StringMessage::SetCachedSize(int size) const {
-  _impl_._cached_size_.Set(size);
+  _impl_.~Impl_();
 }
 
-void StringMessage::InternalSwap(StringMessage* other) {
+::_pbi::CachedSize* StringMessage::AccessCachedSize() const {
+  return &_impl_._cached_size_;
+}
+void StringMessage::InternalSwap(StringMessage* PROTOBUF_RESTRICT other) {
   using std::swap;
   GetReflection()->Swap(this, other);}
 

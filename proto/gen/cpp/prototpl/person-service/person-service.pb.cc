@@ -22,19 +22,20 @@ namespace grpc {
 namespace person {
 namespace service {
 namespace v1 {
-        template <typename>
+
+inline constexpr PersonMessage::Impl_::Impl_(
+    ::_pbi::ConstantInitialized) noexcept
+      : name_(
+            &::google::protobuf::internal::fixed_address_empty_string,
+            ::_pbi::ConstantInitialized()),
+        age_(
+            &::google::protobuf::internal::fixed_address_empty_string,
+            ::_pbi::ConstantInitialized()),
+        _cached_size_{0} {}
+
+template <typename>
 PROTOBUF_CONSTEXPR PersonMessage::PersonMessage(::_pbi::ConstantInitialized)
-    : _impl_{
-      /*decltype(_impl_.name_)*/ {
-          &::_pbi::fixed_address_empty_string,
-          ::_pbi::ConstantInitialized{},
-      },
-      /*decltype(_impl_.age_)*/ {
-          &::_pbi::fixed_address_empty_string,
-          ::_pbi::ConstantInitialized{},
-      },
-      /*decltype(_impl_._cached_size_)*/ {},
-    } {}
+    : _impl_(::_pbi::ConstantInitialized()) {}
 struct PersonMessageDefaultTypeInternal {
   PROTOBUF_CONSTEXPR PersonMessageDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
   ~PersonMessageDefaultTypeInternal() {}
@@ -157,48 +158,34 @@ PersonMessage::PersonMessage(::google::protobuf::Arena* arena)
   SharedCtor(arena);
   // @@protoc_insertion_point(arena_constructor:grpc.person.service.v1.PersonMessage)
 }
-PersonMessage::PersonMessage(const PersonMessage& from) : ::google::protobuf::Message() {
+inline PROTOBUF_NDEBUG_INLINE PersonMessage::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility, ::google::protobuf::Arena* arena,
+    const Impl_& from)
+      : name_(arena, from.name_),
+        age_(arena, from.age_),
+        _cached_size_{0} {}
+
+PersonMessage::PersonMessage(
+    ::google::protobuf::Arena* arena,
+    const PersonMessage& from)
+    : ::google::protobuf::Message(arena) {
   PersonMessage* const _this = this;
   (void)_this;
-  new (&_impl_) Impl_{
-      decltype(_impl_.name_){},
-      decltype(_impl_.age_){},
-      /*decltype(_impl_._cached_size_)*/ {},
-  };
   _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
       from._internal_metadata_);
-  _impl_.name_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-        _impl_.name_.Set("", GetArenaForAllocation());
-  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (!from._internal_name().empty()) {
-    _this->_impl_.name_.Set(from._internal_name(), _this->GetArenaForAllocation());
-  }
-  _impl_.age_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-        _impl_.age_.Set("", GetArenaForAllocation());
-  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (!from._internal_age().empty()) {
-    _this->_impl_.age_.Set(from._internal_age(), _this->GetArenaForAllocation());
-  }
+  new (&_impl_) Impl_(internal_visibility(), arena, from._impl_);
 
   // @@protoc_insertion_point(copy_constructor:grpc.person.service.v1.PersonMessage)
 }
+inline PROTOBUF_NDEBUG_INLINE PersonMessage::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility,
+    ::google::protobuf::Arena* arena)
+      : name_(arena),
+        age_(arena),
+        _cached_size_{0} {}
+
 inline void PersonMessage::SharedCtor(::_pb::Arena* arena) {
-  (void)arena;
-  new (&_impl_) Impl_{
-      decltype(_impl_.name_){},
-      decltype(_impl_.age_){},
-      /*decltype(_impl_._cached_size_)*/ {},
-  };
-  _impl_.name_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-        _impl_.name_.Set("", GetArenaForAllocation());
-  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  _impl_.age_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-        _impl_.age_.Set("", GetArenaForAllocation());
-  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  new (&_impl_) Impl_(internal_visibility(), arena);
 }
 PersonMessage::~PersonMessage() {
   // @@protoc_insertion_point(destructor:grpc.person.service.v1.PersonMessage)
@@ -206,15 +193,16 @@ PersonMessage::~PersonMessage() {
   SharedDtor();
 }
 inline void PersonMessage::SharedDtor() {
-  ABSL_DCHECK(GetArenaForAllocation() == nullptr);
+  ABSL_DCHECK(GetArena() == nullptr);
   _impl_.name_.Destroy();
   _impl_.age_.Destroy();
-}
-void PersonMessage::SetCachedSize(int size) const {
-  _impl_._cached_size_.Set(size);
+  _impl_.~Impl_();
 }
 
-void PersonMessage::InternalSwap(PersonMessage* other) {
+::_pbi::CachedSize* PersonMessage::AccessCachedSize() const {
+  return &_impl_._cached_size_;
+}
+void PersonMessage::InternalSwap(PersonMessage* PROTOBUF_RESTRICT other) {
   using std::swap;
   GetReflection()->Swap(this, other);}
 
