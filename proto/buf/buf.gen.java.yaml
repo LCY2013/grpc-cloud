@@ -23,3 +23,5 @@ plugins:
   # dependencies
   - plugin: buf.build/protocolbuffers/java
     out: gen/java
+  - plugin: buf.build/bufbuild/validate-java
+    out: gen/java
