@@ -29,8 +29,37 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
   ];
 };
 
+//  message SimpleMessage {
+//    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_schema) = {
+//      json_schema: {
+//        title: "SimpleMessage"
+//        description: "A simple message."
+//        required: ["id"]
+//      }
+//    };
+//
+//    // Id represents the message identifier.
+//    string id = 1; [
+//        (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
+//          description: "The unique identifier of the simple message."
+//        }];
+//  }
+
 message StringMessage {
-  string value = 1 [(validate.rules).string = { min_len: 10 }];
+  option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_schema) = {
+    json_schema: {
+      title: "StringMessage"
+      description: "A string message."
+      required: ["value"]
+    }
+  };
+  string value = 1 [
+    (validate.rules).string = {min_len: 5},
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
+      description: "The value of the string message."
+      min_length: 5,
+    }
+  ];
 }
 
 service EchoService {
