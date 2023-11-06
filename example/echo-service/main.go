@@ -16,6 +16,7 @@ func main() {
 	svr := grpc.NewServer()
 	v1.RegisterEchoServiceServer(svr, &GrpcGatewayServerProc{})
 	reflection.Register(svr)
+
 	go func() {
 		time.Sleep(5 * time.Second)
 		client := grpc_cloud_direct.NewDirectRegistryClient("http://127.0.0.1:8080")
