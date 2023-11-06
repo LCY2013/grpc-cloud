@@ -70,6 +70,10 @@ func WithValidateServerInterceptor(ctx context.Context,
 	// validate
 	if validate, ok := req.(interface{ ValidateAll() error }); ok {
 		if err := validate.ValidateAll(); err != nil {
+			logger.Log.Infof("Request - Method:%s\tDuration:%s\tError:%v\n",
+				info.FullMethod,
+				time.Since(start),
+				err)
 			return nil, status.Errorf(codes.InvalidArgument, err.Error())
 		}
 	}

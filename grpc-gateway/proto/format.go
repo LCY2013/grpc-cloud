@@ -507,6 +507,14 @@ func (h *DefaultEventHandler) OnReceiveTrailers(stat *status.Status, md metadata
 	if h.VerbosityLevel > 0 {
 		fmt.Fprintf(h.Out, "\nResponse trailers received:\n%s\n", MetadataToString(md))
 	}
+	switch httpWrite := h.Out.(type) {
+	case http.ResponseWriter:
+		httpWrite.Header().Add("Content-Type", "application/json")
+		httpWrite.WriteHeader(http.StatusBadRequest)
+		httpWrite.Write([]byte(ack.ToFailResponse(stat.Message())))
+	default:
+		fmt.Fprintf(h.Out, ack.ToFailResponse("fail"))
+	}
 }
 
 // PrintStatus prints details about the given status to the given writer. The given

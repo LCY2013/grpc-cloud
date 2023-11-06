@@ -3,6 +3,7 @@ package httprouter
 import (
 	"context"
 	"fmt"
+	"github.com/LCY2013/grpc-cloud/grpc-gateway/ack"
 	grpcgateway "github.com/LCY2013/grpc-cloud/grpc-gateway/proto"
 	"github.com/LCY2013/grpc-cloud/logger"
 	"net/http"
@@ -75,7 +76,7 @@ func (r *Route) addUri(path string, annotation *grpcgateway.Annotation) {
 
 		err = grpcgateway.InvokeRPC(context.Background(), source, cc, annotation.Symbols, header(request.Header), h, rf.Next)
 		if err != nil {
-			_, _ = writer.Write([]byte(err.Error()))
+			_, _ = writer.Write([]byte(ack.ToFailResponse(err.Error())))
 			return
 		}
 	}})

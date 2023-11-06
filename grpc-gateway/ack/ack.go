@@ -30,7 +30,7 @@ func ToSuccessResponse(date string) string {
 
 func ToFailResponse(date string) string {
 	marshal, err := json.Marshal(Response{
-		Code: http.StatusOK,
+		Code: http.StatusBadRequest,
 		Msg:  date,
 	})
 	if err != nil {
