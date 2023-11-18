@@ -74,12 +74,24 @@ func (r *Route) addUri(path string, annotation *grpcgateway.Annotation) {
 			VerbosityLevel: 0, // 0,1,2
 		}
 
-		err = grpcgateway.InvokeRPC(context.Background(), source, cc, annotation.Symbols, header(request.Header), h, rf.Next)
+		//err = grpcgateway.InvokeRPC(context.Background(), source, cc, annotation.Symbols, header(request.Header), h, rf.Next)
+		err = grpcgateway.InvokeRPC(context.Background(), source, cc, annotation.Symbols, header(removeUnusedFields(request.Header)), h, rf.Next)
 		if err != nil {
 			_, _ = writer.Write([]byte(ack.ToFailResponse(err.Error())))
 			return
 		}
 	}})
+}
+
+func removeUnusedFields(h http.Header) (header map[string][]string) {
+	header = map[string][]string{}
+	for k, v := range h {
+		if strings.HasPrefix(k, "X-") || strings.HasPrefix(k, "x-") {
+			header[k] = v
+		}
+	}
+	header["UA"] = []string{"grpc-gateway/fufeng"}
+	return header
 }
 
 func header(deader map[string][]string) (h []string) {

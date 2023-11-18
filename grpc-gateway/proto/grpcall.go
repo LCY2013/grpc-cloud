@@ -27,6 +27,7 @@ import (
 	"github.com/jhump/protoreflect/dynamic"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
+	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/metadata"
 	protov2 "google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/types/descriptorpb"
@@ -328,7 +329,7 @@ func fetchAllExtensions(source DescriptorSource, ext *dynamic.ExtensionRegistry,
 	return nil
 }
 
-// fullConvertToDynamic attempts to convert the given message to a dynamic message as well
+// fullyConvertToDynamic attempts to convert the given message to a dynamic message as well
 // as any nested messages it may contain as field values. If the given message factory has
 // extensions registered that were not known when the given message was parsed, this effectively
 // allows re-parsing to identify those extensions.
@@ -406,9 +407,9 @@ func makeTemplate(md *desc.MessageDescriptor, path []*desc.MessageDescriptor) pr
 	case "google.protobuf.Any":
 		// empty type URL is not allowed by JSON representation
 		// so we must give it a dummy type
-		var any anypb.Any
-		_ = anypb.MarshalFrom(&any, &emptypb.Empty{}, protov2.MarshalOptions{})
-		return &any
+		var anyVal anypb.Any
+		_ = anypb.MarshalFrom(&anyVal, &emptypb.Empty{}, protov2.MarshalOptions{})
+		return &anyVal
 	case "google.protobuf.Value":
 		// unset kind is not allowed by JSON representation
 		// so we must give it something
@@ -604,7 +605,7 @@ func ServerTransportCredentials(cacertFile, serverCertFile, serverKeyFile string
 	return credentials.NewTLS(&tlsConf), nil
 }
 
-// BlockingDial is a helper method to Dial the given address, using optional TLS credentials,
+// BlockingDial is a helper method to dial the given address, using optional TLS credentials,
 // and blocking until the returned connection is ready. If the given credentials are nil, the
 // connection will be insecure (plain-text).
 func BlockingDial(ctx context.Context, network, address string, creds credentials.TransportCredentials, opts ...grpc.DialOption) (*grpc.ClientConn, error) {
@@ -632,11 +633,11 @@ func BlockingDial(ctx context.Context, network, address string, creds credential
 	dialer := func(ctx context.Context, address string) (net.Conn, error) {
 		// NB: We *could* handle the TLS handshake ourselves, in the custom
 		// dialer (instead of customizing both the dialer and the credentials).
-		// But that requires using WithInsecure Dial option (so that the gRPC
-		// library doesn't *also* try to do a handshake). And that would mean
-		// that the library would send the wrong ":scheme" metaheader to
-		// servers: it would send "http" instead of "https" because it is
-		// unaware that TLS is actually in use.
+		// But that requires using insecure.NewCredentials() dial transport
+		// option (so that the gRPC library doesn't *also* try to do a
+		// handshake). And that would mean that the library would send the
+		// wrong ":scheme" metaheader to servers: it would send "http" instead
+		// of "https" because it is unaware that TLS is actually in use.
 		conn, err := (&net.Dialer{}).DialContext(ctx, network, address)
 		if err != nil {
 			writeResult(err)
@@ -657,7 +658,7 @@ func BlockingDial(ctx context.Context, network, address string, creds credential
 		opts = append(opts, grpc.WithBlock(), grpc.WithContextDialer(dialer))
 
 		if creds == nil {
-			opts = append(opts, grpc.WithInsecure())
+			opts = append(opts, grpc.WithTransportCredentials(insecure.NewCredentials()))
 		} else {
 			opts = append(opts, grpc.WithTransportCredentials(creds))
 		}

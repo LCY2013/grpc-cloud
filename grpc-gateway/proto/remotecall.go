@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"github.com/LCY2013/grpc-cloud/logger"
 	"github.com/golang/protobuf/proto"
+	"github.com/jhump/protoreflect/dynamic"
 	"github.com/jhump/protoreflect/grpcreflect"
 	"google.golang.org/grpc/metadata"
-	"google.golang.org/grpc/reflection/grpc_reflection_v1alpha"
 	"net/http"
 	"regexp"
 	"strings"
@@ -52,7 +52,8 @@ func GetDescSource(ctx context.Context, address string, headerList ...http.Heade
 	if err != nil {
 		return nil, err
 	}
-	refClient := grpcreflect.NewClient(refCtx, grpc_reflection_v1alpha.NewServerReflectionClient(cc))
+	//refClient := grpcreflect.NewClient(refCtx, grpc_reflection_v1alpha.NewServerReflectionClient(cc))
+	refClient := grpcreflect.NewClientAuto(refCtx, cc)
 	reflectSource := DescriptorSourceFromServer(ctx, refClient)
 	return reflectSource, nil
 }
@@ -96,7 +97,19 @@ func ListServiceMethod(ctx context.Context, address string, headerList ...http.H
 					Symbols: fmt.Sprintf("%s/%s", s, method.GetName()),
 				}
 
+				dm, ok := optVal.(*dynamic.Message)
+				optionName := ""
+				if ok {
+					descriptor := dm.GetMessageDescriptor()
+					descriptorUnwrap := descriptor.Unwrap()
+					optionName = string(descriptorUnwrap.FullName())
+				}
+				if optionName != "google.api.HttpRule" {
+					continue
+				}
+
 				anno := compactTextMarshaler.Text(optVal)
+				logger.Log.Infof("optionName: %s", optVal.String())
 				logger.Log.Info(anno)
 				kind, path, yes := httpCustom(anno)
 				if yes {
@@ -108,10 +121,13 @@ func ListServiceMethod(ctx context.Context, address string, headerList ...http.H
 				kvs := strings.Split(anno, " ")
 				for _, a := range kvs {
 					kv := strings.Split(a, ":")
+					if len(kv) != 2 {
+						continue
+					}
 					annota.Map[kv[0]] = removeQuote(kv[1])
 					if _, ok := MethodMap[strings.ToUpper(kv[0])]; ok {
 						annota.Method = removeQuote(MethodMap[strings.ToUpper(kv[0])])
-						annotation[kv[1]] = annota
+						annotation[removeQuote(kv[1])] = annota
 					}
 				}
 			}

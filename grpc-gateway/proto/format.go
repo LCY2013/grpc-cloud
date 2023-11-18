@@ -138,10 +138,25 @@ type Formatter func(proto.Message) (string, error)
 func NewJSONFormatter(emitDefaults bool, resolver jsonpb.AnyResolver) Formatter {
 	marshaler := jsonpb.Marshaler{
 		EmitDefaults: emitDefaults,
-		Indent:       "  ",
 		AnyResolver:  resolver,
 	}
-	return marshaler.MarshalToString
+	// Workaround for indentation issue in jsonpb with Any messages.
+	// Bug was originally fixed in https://github.com/golang/protobuf/pull/834
+	// but later re-introduced before the module was deprecated and frozen.
+	// If jsonpb is ever replaced with google.golang.org/protobuf/encoding/protojson
+	// this workaround will no longer be needed.
+	formatter := func(message proto.Message) (string, error) {
+		output, err := marshaler.MarshalToString(message)
+		if err != nil {
+			return "", err
+		}
+		var buf bytes.Buffer
+		if err := json.Indent(&buf, []byte(output), "", "  "); err != nil {
+			return "", err
+		}
+		return buf.String(), nil
+	}
+	return formatter
 }
 
 // NewTextFormatter returns a formatter that returns strings in the protobuf
@@ -276,11 +291,11 @@ func (r *anyResolver) Resolve(typeUrl string) (proto.Message, error) {
 	if !ok {
 		return nil, fmt.Errorf("unknown message: %s", typeUrl)
 	}
-	// populate any extensions for this message, too
-	if exts, err := r.source.AllExtensionsForType(mname); err != nil {
-		return nil, err
-	} else if err := r.er.AddExtension(exts...); err != nil {
-		return nil, err
+	// populate any extensions for this message, too (if there are any)
+	if exts, err := r.source.AllExtensionsForType(mname); err == nil {
+		if err := r.er.AddExtension(exts...); err != nil {
+			return nil, err
+		}
 	}
 
 	if r.mf == nil {
@@ -498,7 +513,6 @@ func (h *DefaultEventHandler) OnReceiveResponse(resp proto.Message) {
 		default:
 			fmt.Fprintf(h.Out, ack.ToSuccessResponse(respStr))
 		}
-
 	}
 }
 
@@ -507,13 +521,15 @@ func (h *DefaultEventHandler) OnReceiveTrailers(stat *status.Status, md metadata
 	if h.VerbosityLevel > 0 {
 		fmt.Fprintf(h.Out, "\nResponse trailers received:\n%s\n", MetadataToString(md))
 	}
-	switch httpWrite := h.Out.(type) {
-	case http.ResponseWriter:
-		httpWrite.Header().Add("Content-Type", "application/json")
-		httpWrite.WriteHeader(http.StatusBadRequest)
-		httpWrite.Write([]byte(ack.ToFailResponse(stat.Message())))
-	default:
-		fmt.Fprintf(h.Out, ack.ToFailResponse("fail"))
+	if stat != nil {
+		switch httpWrite := h.Out.(type) {
+		case http.ResponseWriter:
+			httpWrite.Header().Add("Content-Type", "application/json")
+			httpWrite.WriteHeader(http.StatusInternalServerError)
+			httpWrite.Write([]byte(ack.ToFailResponse(stat.Message())))
+		default:
+			fmt.Fprintf(h.Out, ack.ToFailResponse("fail"))
+		}
 	}
 }
 
