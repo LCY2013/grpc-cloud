@@ -4,6 +4,8 @@ github.com/LCY2013/grpc-cloud/logger v0.0.0-20231106084339-faba83863498 h1:SjI+g
 github.com/LCY2013/grpc-cloud/logger v0.0.0-20231106084339-faba83863498/go.mod h1:H9pntoYd6OAmCVv9sBqA6kIkdrgovJ8OK7fh6Q8FKYA=
 github.com/LCY2013/grpc-cloud/plugins/grpc-cloud-plugin-validate v0.0.0-20231118095825-ed37a9f85a1f h1:26WrITdYqMY0sRVxgQ0s2wXVn70rcgim+/nmkXKd7uM=
 github.com/LCY2013/grpc-cloud/plugins/grpc-cloud-plugin-validate v0.0.0-20231118095825-ed37a9f85a1f/go.mod h1:QqiqtU2snPgzpd4PCOMBzWtmKMsc1RmkagPMiQR2P3I=
+github.com/LCY2013/grpc-cloud/plugins/grpc-cloud-plugin-validate v0.0.0-20231118101842-41e25339481c h1:IHm1I3NAcquftORn6Nrxqou9k0yAQitlsuNIGRv3/2k=
+github.com/LCY2013/grpc-cloud/plugins/grpc-cloud-plugin-validate v0.0.0-20231118101842-41e25339481c/go.mod h1:QqiqtU2snPgzpd4PCOMBzWtmKMsc1RmkagPMiQR2P3I=
 github.com/LCY2013/grpc-cloud/proto/gen/go v0.0.0-20231118095825-ed37a9f85a1f h1:PvGiQIjw36U9xihGh+zq4cE30dOaPHleVlY8cbfLLVQ=
 github.com/LCY2013/grpc-cloud/proto/gen/go v0.0.0-20231118095825-ed37a9f85a1f/go.mod h1:DsNo2+y1+q/wVxhu0sKcBeWYcz/vjZjLdkRsWvrWR44=
 github.com/LCY2013/grpc-cloud/registry/grpc-cloud-direct v0.0.0-20231106084339-faba83863498 h1:8eYejilOt2eSEE8P01hn+PNXpN1Ld3WtxNwiun4YT+A=
