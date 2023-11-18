@@ -5,7 +5,7 @@ go 1.21.3
 require (
 	github.com/LCY2013/grpc-cloud/logger v0.0.0-20231106084339-faba83863498
 	github.com/LCY2013/grpc-cloud/plugins/grpc-cloud-plugin-validate v0.0.0-20231106084339-faba83863498
-	github.com/LCY2013/grpc-cloud/proto/gen/go v0.0.0-20231106084339-faba83863498
+	github.com/LCY2013/grpc-cloud/proto/gen/go v0.0.0-20231118072301-f8050de59cc5
 	github.com/LCY2013/grpc-cloud/registry/grpc-cloud-direct v0.0.0-20231106084339-faba83863498
 	google.golang.org/grpc v1.59.0
 )
