@@ -5,7 +5,7 @@ managed:
 # single request: got 11, limit is 10
   # go
   go_package_prefix:
-#    default: github.com/acme/weather/private/gen/proto/go
+    default: github.com/LCY2013/grpc-cloud/proto/gen/go
     except:
       - buf.build/bufbuild/protovalidate
 #      - buf.build/googleapis/googleapis
