@@ -2,12 +2,16 @@ cloud.google.com/go v0.26.0/go.mod h1:aQUYkXzVsufM+DwF1aE+0xfcU+56JwCaLick0ClmMT
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
 github.com/LCY2013/grpc-cloud/logger v0.0.0-20231029040625-a4f1adffdb05 h1:72x5eUX5pXYZyuba6KUseMuruEcKr98WQpPydd1ncV4=
 github.com/LCY2013/grpc-cloud/logger v0.0.0-20231029040625-a4f1adffdb05/go.mod h1:H9pntoYd6OAmCVv9sBqA6kIkdrgovJ8OK7fh6Q8FKYA=
+github.com/LCY2013/grpc-cloud/logger v0.0.0-20231106084339-faba83863498 h1:SjI+gux/wCYx/lNJi1SrLzfqhjHz+xQFWAItJjVUwIE=
+github.com/LCY2013/grpc-cloud/logger v0.0.0-20231106084339-faba83863498/go.mod h1:H9pntoYd6OAmCVv9sBqA6kIkdrgovJ8OK7fh6Q8FKYA=
 github.com/LCY2013/grpc-cloud/registry/grpc-cloud-direct v0.0.0-20231029040625-a4f1adffdb05 h1:Ru4ZKL8rEqSbJEiEmeHiipzs2V3EuJgcSa5XDvWEEW0=
 github.com/LCY2013/grpc-cloud/registry/grpc-cloud-direct v0.0.0-20231029040625-a4f1adffdb05/go.mod h1:FavlLkWZBZhcIE4t8rzjg8qqYiczREVNDkp9mGL+BI0=
 github.com/LCY2013/grpc-cloud/registry/grpc-cloud-direct v0.0.0-20231029101820-eacb8e9b86cf h1:swa0OwffgCDugpvSCUuYOiUWYwwFgBGIpLk/i9UmMK4=
 github.com/LCY2013/grpc-cloud/registry/grpc-cloud-direct v0.0.0-20231029101820-eacb8e9b86cf/go.mod h1:FavlLkWZBZhcIE4t8rzjg8qqYiczREVNDkp9mGL+BI0=
 github.com/LCY2013/grpc-cloud/registry/grpc-cloud-direct v0.0.0-20231029141816-c2ae1acb40e6 h1:lezlSmf2d+7hh4HlsjtWA76Qp4kbxS2cejKcpD3bhBI=
 github.com/LCY2013/grpc-cloud/registry/grpc-cloud-direct v0.0.0-20231029141816-c2ae1acb40e6/go.mod h1:FavlLkWZBZhcIE4t8rzjg8qqYiczREVNDkp9mGL+BI0=
+github.com/LCY2013/grpc-cloud/registry/grpc-cloud-direct v0.0.0-20231106084339-faba83863498 h1:8eYejilOt2eSEE8P01hn+PNXpN1Ld3WtxNwiun4YT+A=
+github.com/LCY2013/grpc-cloud/registry/grpc-cloud-direct v0.0.0-20231106084339-faba83863498/go.mod h1:FavlLkWZBZhcIE4t8rzjg8qqYiczREVNDkp9mGL+BI0=
 github.com/LCY2013/grpc-cloud/registry/registry v0.0.0-20231027083515-f19328caf8b8 h1:RdoMw1iLZpKKIhwSKWO14vVHWdK8/5BwOmcc9vyrGts=
 github.com/LCY2013/grpc-cloud/registry/registry v0.0.0-20231027083515-f19328caf8b8/go.mod h1:IN7q71Xk8NFBcLIlb+fPlnU9r+8uBgOrQv+sIlg4zms=
 github.com/census-instrumentation/opencensus-proto v0.2.1/go.mod h1:f6KPmirojxKA12rnyqOA5BBL4O983OfeGPqjHWSTneU=
