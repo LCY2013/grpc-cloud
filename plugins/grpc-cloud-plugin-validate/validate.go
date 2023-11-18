@@ -122,16 +122,16 @@ func WithValidatePbServerInterceptor(ctx context.Context,
 			ok = errors.As(err, &ev)
 			if ok {
 				bldr := &strings.Builder{}
-				bldr.WriteString("validation error:")
+				bldr.WriteString("validation error: ")
 				for _, violation := range ev.Violations {
-					bldr.WriteString(" (")
+					bldr.WriteString("(")
 					if violation.FieldPath != "" {
 						bldr.WriteString(violation.FieldPath)
 						bldr.WriteString(": ")
 					}
 					_, _ = fmt.Fprintf(bldr, "%s",
 						violation.Message)
-					bldr.WriteString(" )")
+					bldr.WriteString(")")
 				}
 				return nil, status.Errorf(codes.InvalidArgument, bldr.String())
 			}
