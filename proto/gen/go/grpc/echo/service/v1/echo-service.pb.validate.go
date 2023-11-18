@@ -57,10 +57,10 @@ func (m *StringMessage) validate(all bool) error {
 
 	var errors []error
 
-	if utf8.RuneCountInString(m.GetValue()) < 10 {
+	if utf8.RuneCountInString(m.GetValue()) < 5 {
 		err := StringMessageValidationError{
 			field:  "Value",
-			reason: "value length must be at least 10 runes",
+			reason: "value length must be at least 5 runes",
 		}
 		if !all {
 			return err
