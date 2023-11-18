@@ -4,10 +4,10 @@ managed:
   optimize_for: CODE_SIZE
 # single request: got 11, limit is 10
   # go
-  go_package_prefix:
-    default: github.com/LCY2013/grpc-cloud/proto/gen/go
-    except:
-      - buf.build/bufbuild/protovalidate
+#  go_package_prefix:
+#    default: grpc.echo.service.v1
+#    except:
+#      - buf.build/bufbuild/protovalidate
 #      - buf.build/googleapis/googleapis
 #    override:
 #      buf.build/acme/weather: github.com/acme/weather/gen/proto/go
