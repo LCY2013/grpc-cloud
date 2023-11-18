@@ -2,12 +2,15 @@ package grpc_cloud_plugin_validate
 
 import (
 	"context"
+	"errors"
+	"fmt"
 	"github.com/LCY2013/grpc-cloud/logger"
 	"github.com/bufbuild/protovalidate-go"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/proto"
+	"strings"
 	"time"
 )
 
@@ -115,6 +118,23 @@ func WithValidatePbServerInterceptor(ctx context.Context,
 				info.FullMethod,
 				time.Since(start),
 				err)
+			var ev *protovalidate.ValidationError
+			ok = errors.As(err, &ev)
+			if ok {
+				bldr := &strings.Builder{}
+				bldr.WriteString("validation error:")
+				for _, violation := range ev.Violations {
+					bldr.WriteString(" (")
+					if violation.FieldPath != "" {
+						bldr.WriteString(violation.FieldPath)
+						bldr.WriteString(": ")
+					}
+					_, _ = fmt.Fprintf(bldr, "%s",
+						violation.Message)
+					bldr.WriteString(" )")
+				}
+				return nil, status.Errorf(codes.InvalidArgument, bldr.String())
+			}
 			return nil, status.Errorf(codes.InvalidArgument, err.Error())
 		}
 	}

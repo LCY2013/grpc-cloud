@@ -5,13 +5,13 @@ go 1.21.3
 require (
 	github.com/LCY2013/grpc-cloud/logger v0.0.0-20231106084339-faba83863498
 	github.com/LCY2013/grpc-cloud/plugins/grpc-cloud-plugin-validate v0.0.0-20231118095825-ed37a9f85a1f
-	github.com/LCY2013/grpc-cloud/proto/gen/go v0.0.0-20231118093349-7b20219fee1a
+	github.com/LCY2013/grpc-cloud/proto/gen/go v0.0.0-20231118095825-ed37a9f85a1f
 	github.com/LCY2013/grpc-cloud/registry/grpc-cloud-direct v0.0.0-20231106084339-faba83863498
 	google.golang.org/grpc v1.59.0
 )
 
 require (
-	buf.build/gen/go/bufbuild/protovalidate/protocolbuffers/go v1.31.0-20231106192134-1baebb0a1518.2 // indirect
+	buf.build/gen/go/bufbuild/protovalidate/protocolbuffers/go v1.31.0-20231115204500-e097f827e652.2 // indirect
 	github.com/LCY2013/grpc-cloud/registry/registry v0.0.0-20231027083515-f19328caf8b8 // indirect
 	github.com/antlr4-go/antlr/v4 v4.13.0 // indirect
 	github.com/bufbuild/protovalidate-go v0.4.2 // indirect
