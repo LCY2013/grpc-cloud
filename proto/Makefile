@@ -70,7 +70,7 @@ generate:
 #		buf generate --template buf/buf.gen.python.yaml $(buf_paths);
 		git add .;
 		git commit -m "Chore: generate code by auto"
-		git push origin main;
+		#git push origin main;
 
 # generate swagger file by proto file
 swagger:
