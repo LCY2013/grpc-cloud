@@ -2,6 +2,7 @@ syntax = "proto3";
 package grpc.person.service.v1;
 option go_package = "grpc/person/service/v1";
 
+import "buf/validate/validate.proto";
 import "google/api/annotations.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
 
@@ -29,8 +30,8 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 };
 
 message PersonMessage {
-  string name = 1;
-  string age = 2;
+  string name = 1 [(buf.validate.field).string.min_len = 5];
+  int32 age = 2 [(buf.validate.field).int32.gt = 20];
 }
 
 service PersonService {
