@@ -3,6 +3,8 @@ module github.com/LCY2013/grpc-cloud/proto/gen/go
 go 1.21.1
 
 require (
+	buf.build/gen/go/bufbuild/protovalidate/protocolbuffers/go v1.31.0-20231115204500-e097f827e652.2
+	github.com/envoyproxy/protoc-gen-validate v1.0.2
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.18.0
 	google.golang.org/genproto/googleapis/api v0.0.0-20231016165738-49dd2c1f3d0b
 	google.golang.org/grpc v1.59.0
