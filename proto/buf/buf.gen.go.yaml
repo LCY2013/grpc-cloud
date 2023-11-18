@@ -4,9 +4,10 @@ managed:
   optimize_for: CODE_SIZE
 # single request: got 11, limit is 10
   # go
-#  go_package_prefix:
+  go_package_prefix:
 #    default: github.com/acme/weather/private/gen/proto/go
-#    except:
+    except:
+      - buf.build/bufbuild/protovalidate
 #      - buf.build/googleapis/googleapis
 #    override:
 #      buf.build/acme/weather: github.com/acme/weather/gen/proto/go
