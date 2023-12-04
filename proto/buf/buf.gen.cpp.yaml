@@ -17,5 +17,5 @@ plugins:
   # dependencies
   - plugin: buf.build/protocolbuffers/cpp
     out: gen/cpp
-  - plugin: buf.build/bufbuild/validate-cc
-    out: gen/cpp
+#  - plugin: buf.build/bufbuild/validate-cc
+#    out: gen/cpp
