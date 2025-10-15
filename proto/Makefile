@@ -65,8 +65,8 @@ help:
 generate:
 		buf generate --template buf/buf.gen.go.yaml $(buf_paths);
 		buf generate --template buf/buf.gen.java.yaml $(buf_paths);
-		#buf generate --template buf/buf.gen.python.yaml $(buf_paths);
-		#buf generate --template buf/buf.gen.cpp.yaml $(buf_paths);
+		buf generate --template buf/buf.gen.python.yaml $(buf_paths);
+		buf generate --template buf/buf.gen.cpp.yaml $(buf_paths);
 		#buf generate --template buf/buf.gen.rust.yaml $(buf_paths);
 		git add .;
 		git commit -m "Chore: generate code by auto"

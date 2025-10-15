@@ -2,20 +2,20 @@ version: v1
 managed:
   enabled: true
   optimize_for: CODE_SIZE
-# single request: got 11, limit is 10
+  # single request: got 11, limit is 10
   # C++
 
 #https://buf.build/plugins
 plugins:
-########### CPP ###############
-# local cpp plugin
-#  - plugin: cpp
-#    out: gen/cpp
-#  remote cpp plugin
+  ########### CPP ###############
+  # local cpp plugin
+  #  - plugin: cpp
+  #    out: gen/cpp
+  #  remote cpp plugin
   - plugin: buf.build/grpc/cpp:v1.59.1
     out: gen/cpp
   # dependencies
   - plugin: buf.build/protocolbuffers/cpp
     out: gen/cpp
-  - plugin: buf.build/bufbuild/validate-cc
+  - plugin: buf.build/bufbuild/validate-cpp
     out: gen/cpp

@@ -76,44 +76,45 @@ static const ::_pb::Message* const file_default_instances[] = {
 const char descriptor_table_protodef_prototpl_2fecho_2dservice_2fecho_2dservice_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
     "\n(prototpl/echo-service/echo-service.pro"
     "to\022\024grpc.echo.service.v1\032\034google/api/ann"
-    "otations.proto\032;grpc-gateway/protoc-gen-"
-    "openapiv2/options/annotations.proto\032+pro"
-    "toc-gen-validate/validate/validate.proto"
-    "\".\n\rStringMessage\022\035\n\005value\030\001 \001(\tB\007\372B\004r\002\020"
-    "\nR\005value2\226\003\n\013EchoService\022\272\001\n\004Echo\022#.grpc"
-    ".echo.service.v1.StringMessage\032#.grpc.ec"
-    "ho.service.v1.StringMessage\"h\222A=\n\014echo-s"
-    "ervice\022\016echo a message\032\004desc*\ngetMessage"
-    "J\013\n\003200\022\004\n\002OK\202\323\344\223\002\"\"\035/echo/service/v1/ex"
-    "ample/echo:\001*\022\311\001\n\014EchoCustomer\022#.grpc.ec"
-    "ho.service.v1.StringMessage\032#.grpc.echo."
-    "service.v1.StringMessage\"o\222A=\n\014echo-serv"
-    "ice\022\016echo a message\032\004desc*\ngetMessageJ\013\n"
-    "\003200\022\004\n\002OK\202\323\344\223\002):\001*B$\n\001*\022\037/echo/service/"
-    "v1/example/echo/cB\256\003\n\030com.grpc.echo.serv"
-    "ice.v1B\020EchoServiceProtoH\002P\001Z\024grpc/echo/"
-    "service/v1\242\002\003GES\252\002\024Grpc.Echo.Service.V1\312"
-    "\002\025Grpc\\Echo_\\Service\\V1\342\002!Grpc\\Echo_\\Ser"
-    "vice\\V1\\GPBMetadata\352\002\027Grpc::Echo::Servic"
-    "e::V1\222A\361\001\022\267\001\n\010Echo API\"O\n\024echo_service p"
-    "roject\022%https://github.com/LCY2013/grpc-"
-    "cloud\032\020none@example.com*U\n\032Apache Licens"
-    "e Version 2.0\0227https://github.com/LCY201"
-    "3/grpc-cloud/blob/main/LICENSE2\0031.0*\001\0022\020"
-    "application/json:\020application/jsonj\016\n\014ec"
-    "ho-serviceb\006proto3"
+    "otations.proto\032.protoc-gen-openapiv2/opt"
+    "ions/annotations.proto\032\027validate/validat"
+    "e.proto\"\207\001\n\rStringMessage\022E\n\005value\030\001 \001(\t"
+    "B/\222A%2 The value of the string message.\200"
+    "\001\005\372B\004r\002\020\005R\005value:/\222A,\n**\rStringMessage2\021"
+    "A string message.\322\001\005value2\226\003\n\013EchoServic"
+    "e\022\272\001\n\004Echo\022#.grpc.echo.service.v1.String"
+    "Message\032#.grpc.echo.service.v1.StringMes"
+    "sage\"h\222A=\n\014echo-service\022\016echo a message\032"
+    "\004desc*\ngetMessageJ\013\n\003200\022\004\n\002OK\202\323\344\223\002\"\"\035/e"
+    "cho/service/v1/example/echo:\001*\022\311\001\n\014EchoC"
+    "ustomer\022#.grpc.echo.service.v1.StringMes"
+    "sage\032#.grpc.echo.service.v1.StringMessag"
+    "e\"o\222A=\n\014echo-service\022\016echo a message\032\004de"
+    "sc*\ngetMessageJ\013\n\003200\022\004\n\002OK\202\323\344\223\002):\001*B$\n\001"
+    "*\022\037/echo/service/v1/example/echo/cB\256\003\n\030c"
+    "om.grpc.echo.service.v1B\020EchoServiceProt"
+    "oH\002P\001Z\024grpc/echo/service/v1\242\002\003GES\252\002\024Grpc"
+    ".Echo.Service.V1\312\002\025Grpc\\Echo_\\Service\\V1"
+    "\342\002!Grpc\\Echo_\\Service\\V1\\GPBMetadata\352\002\027G"
+    "rpc::Echo::Service::V1\222A\361\001\022\267\001\n\010Echo API\""
+    "O\n\024echo_service project\022%https://github."
+    "com/LCY2013/grpc-cloud\032\020none@example.com"
+    "*U\n\032Apache License Version 2.0\0227https://"
+    "github.com/LCY2013/grpc-cloud/blob/main/"
+    "LICENSE2\0031.0*\001\0022\020application/json:\020appli"
+    "cation/jsonj\016\n\014echo-serviceb\006proto3"
 };
 static const ::_pbi::DescriptorTable* const descriptor_table_prototpl_2fecho_2dservice_2fecho_2dservice_2eproto_deps[3] =
     {
         &::descriptor_table_google_2fapi_2fannotations_2eproto,
-        &::descriptor_table_grpc_2dgateway_2fprotoc_2dgen_2dopenapiv2_2foptions_2fannotations_2eproto,
-        &::descriptor_table_protoc_2dgen_2dvalidate_2fvalidate_2fvalidate_2eproto,
+        &::descriptor_table_protoc_2dgen_2dopenapiv2_2foptions_2fannotations_2eproto,
+        &::descriptor_table_validate_2fvalidate_2eproto,
 };
 static ::absl::once_flag descriptor_table_prototpl_2fecho_2dservice_2fecho_2dservice_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_prototpl_2fecho_2dservice_2fecho_2dservice_2eproto = {
     false,
     false,
-    1098,
+    1155,
     descriptor_table_protodef_prototpl_2fecho_2dservice_2fecho_2dservice_2eproto,
     "prototpl/echo-service/echo-service.proto",
     &descriptor_table_prototpl_2fecho_2dservice_2fecho_2dservice_2eproto_once,

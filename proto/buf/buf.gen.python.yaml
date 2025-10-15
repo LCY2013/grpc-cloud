@@ -15,5 +15,3 @@ plugins:
   # dependencies
   - plugin: buf.build/protocolbuffers/python
     out: gen/python
-  - plugin: buf.build/bufbuild/validate-python
-    out: gen/python
